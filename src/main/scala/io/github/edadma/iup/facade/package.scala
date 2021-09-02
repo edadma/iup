@@ -35,8 +35,11 @@ package object facade {
   lazy val IUP_TOPPARENT: IupPosition    = IUP_LEFTPARENT
   lazy val IUP_BOTTOMPARENT: IupPosition = IUP_RIGHTPARENT
 
-  // const char
-  // only for UI attributes and text (const char*) which change seldomly if ever; gets closed by IupClose()
+  // atom allocation Zone is for 'const char*' string arguments
+  //   it was discovered that, in this library, strings that are declared 'const char*' can't be freed, at least
+  //   until the element is displayed.  So, to be safe, they are never free (but also never duplicated) until
+  //   the UI is closed
+  // only for UI attributes and text which change seldomly if ever; gets closed by IupClose()
   private lazy val atomZone = Zone.open()
   private lazy val atoms    = mutable.HashMap[String, CString]()
 

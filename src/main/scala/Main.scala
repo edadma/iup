@@ -15,6 +15,24 @@ import scala.scalanative.unsafe.{CQuote, Zone, toCString}
 //
 //}
 
+//object Main extends App {
+//
+//  if (IupOpen == IUP_ERROR) {
+//    println("Error opening window")
+//    sys.exit(1)
+//  }
+//
+//  val label = IupLabel("Hello world from IUP.")
+//  val dlg   = IupDialog(IupVbox(label))
+//
+//  dlg.TITLE = "Hello World 2"
+//  dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
+//
+//  IupMainLoop
+//  IupClose()
+//
+//}
+
 object Main extends App {
 
   if (IupOpen == IUP_ERROR) {
@@ -30,4 +48,5 @@ object Main extends App {
 
   IupMainLoop
   IupClose()
+
 }
