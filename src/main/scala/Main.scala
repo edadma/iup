@@ -23,7 +23,7 @@ object Main extends App {
   val dlg   = IupDialog(IupVbox(label))
 
   dlg.TITLE = "Hello World 2"
-  dlg.IupShowXY(IUP_CENTER, IUP_CENTER);
+  dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
 
   IupMainLoop
   IupClose()
