@@ -6,7 +6,8 @@ import scala.scalanative.unsafe._
 @extern
 object LibIUP {
 
-  type Ihandle_ = Ptr[CStruct0]
+  type IhandlePtr = Ptr[CStruct0]
+  type Icallback  = CFuncPtr1[IhandlePtr, CInt]
 
   // Main API
 
@@ -16,16 +17,19 @@ object LibIUP {
 
   def IupMainLoop: CInt = extern
 
-  def IupShowXY(ih: Ihandle_, x: CInt, y: CInt): CInt = extern
+  def IupShowXY(ih: IhandlePtr, x: CInt, y: CInt): CInt = extern
 
-  def IupSetAttribute(ih: Ihandle_, name: CString, value: CString): Unit = extern
+  def IupSetAttribute(ih: IhandlePtr, name: CString, value: CString): Unit = extern
+
+  def IupSetCallback(ih: IhandlePtr, name: CString, func: Icallback): Icallback = extern
 
   // Elements
 
-  def IupVboxv(child: Ptr[Ihandle_]): Ihandle_ = extern
+  def IupVboxv(child: Ptr[IhandlePtr]): IhandlePtr = extern
 
-  def IupDialog(child: Ihandle_): Ihandle_ = extern
-  def IupLabel(title: CString): Ihandle_   = extern
+  def IupButton(title: CString, action: CString): IhandlePtr = extern
+  def IupDialog(child: IhandlePtr): IhandlePtr               = extern
+  def IupLabel(title: CString): IhandlePtr                   = extern
 
   // Utilities
 

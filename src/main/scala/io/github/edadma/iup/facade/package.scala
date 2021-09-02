@@ -35,6 +35,14 @@ package object facade {
   lazy val IUP_TOPPARENT: IupPosition    = IUP_LEFTPARENT
   lazy val IUP_BOTTOMPARENT: IupPosition = IUP_RIGHTPARENT
 
+  // Callback Return Values
+  implicit class IupReturn(val ret: CInt) extends AnyVal
+
+  lazy val IUP_IGNORE: IupReturn   = IupReturn(-1)
+  lazy val IUP_DEFAULT: IupReturn  = IupReturn(-2)
+  lazy val IUP_CLOSE: IupReturn    = IupReturn(-3)
+  lazy val IUP_CONTINUE: IupReturn = IupReturn(-4)
+
   // atom allocation Zone is for 'const char*' string arguments
   //   it was discovered that, in this library, strings that are declared 'const char*' can't be freed, at least
   //   until the element is displayed.  So, to be safe, they are never free (but also never duplicated) until
@@ -44,17 +52,21 @@ package object facade {
   private lazy val atoms    = mutable.HashMap[String, CString]()
 
   private def atom(s: String) =
-    atoms get s match {
-      case Some(value) => value
-      case None =>
-        val res = toCString(s)(atomZone)
+    s match {
+      case null => null
+      case _ =>
+        atoms get s match {
+          case Some(value) => value
+          case None =>
+            val res = toCString(s)(atomZone)
 
-        atoms(s) = res
-        res
+            atoms(s) = res
+            res
+        }
     }
 
-  private def copyChild(child: Seq[Ihandle])(implicit z: Zone): Ptr[iup.Ihandle_] = {
-    val cs = alloc[iup.Ihandle_]((child.length + 1).toUInt)
+  private def copyChild(child: Seq[Ihandle]) /*(implicit z: Zone)*/: Ptr[iup.IhandlePtr] = { // todo: change back to implicit Zone
+    val cs = alloc[iup.IhandlePtr]((child.length + 1).toUInt)(tagof[iup.IhandlePtr], atomZone)
 
     for ((c, i) <- child.zipWithIndex)
       cs(i) = c.ih
@@ -65,12 +77,18 @@ package object facade {
 
   private implicit def cint2boolean(v: CInt): Boolean = if (v == 0) false else true
 
-  implicit class Ihandle(val ih: iup.Ihandle_) extends AnyVal with Dynamic {
+  implicit class Ihandle(val ih: iup.IhandlePtr) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
 
-    def updateDynamic(name: String)(value: String): Ihandle = {
-      iup.IupSetAttribute(ih, atom(name), atom(value))
-      this
+    def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
+      valueOrCallback match {
+        case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
+        case callback: Function1[_, _] =>
+          iup.IupSetCallback(ih,
+                             atom(name),
+                             CFuncPtr1.fromScalaFunction /*[iup.IhandlePtr, CInt]*/ (
+                               Util.wrapCallback(callback.asInstanceOf[Ihandle => IupReturn])))
+      }
     }
 
 //    def int(attr: String): Int = {}
@@ -93,15 +111,16 @@ package object facade {
 
   // Elements
 
-  def IupVbox(child: Ihandle*): Ihandle = Zone(implicit z => iup.IupVboxv(copyChild(child)))
+  def IupVbox(child: Ihandle*): Ihandle = /*Zone(implicit z =>*/ iup.IupVboxv(copyChild(child)) //)
 
-  def IupDialog(child: Ihandle): Ihandle = iup.IupDialog(child.ih)
-  def IupLabel(title: String): Ihandle   = iup.IupLabel(atom(title))
+  def IupButton(title: String, action: String): Ihandle = iup.IupButton(atom(title), atom(action))
+  def IupDialog(child: Ihandle): Ihandle                = iup.IupDialog(child.ih)
+  def IupLabel(title: String): Ihandle                  = iup.IupLabel(atom(title))
 
   // Utilities
 
   // Pre-defined dialogs
 
-  def IupMessage(title: String, msg: String): Unit = Zone(implicit z => iup.IupMessage(toCString(title), toCString(msg)))
+  def IupMessage(title: String, msg: String): Unit = iup.IupMessage(atom(title), atom(msg))
 
 }
