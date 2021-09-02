@@ -35,7 +35,9 @@ package object facade {
   lazy val IUP_TOPPARENT: IupPosition    = IUP_LEFTPARENT
   lazy val IUP_BOTTOMPARENT: IupPosition = IUP_RIGHTPARENT
 
-  private lazy val atomZone = Zone.open() // only for UI attributes and text (const* char) which change seldomly if ever; gets closed by IupClose()
+  // const char
+  // only for UI attributes and text (const char*) which change seldomly if ever; gets closed by IupClose()
+  private lazy val atomZone = Zone.open()
   private lazy val atoms    = mutable.HashMap[String, CString]()
 
   private def atom(s: String) =
