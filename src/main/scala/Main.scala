@@ -7,7 +7,7 @@ import io.github.edadma.iup.facade._
 //    sys.exit(1)
 //  }
 //
-//  IupMessage("Hello World!", "Hello world from IUP.")
+//  IupMessage("Hello World 1", "Hello world from IUP.")
 //  IupClose()
 //
 //}
