@@ -1,5 +1,6 @@
 package io.github.edadma.iup
 
+import io.github.edadma.iup.extern.LibIUP.IhandlePtr
 import io.github.edadma.iup.extern.{LibIUP => iup}
 
 import scala.collection.mutable
@@ -83,10 +84,8 @@ package object facade {
     def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
       valueOrCallback match {
         case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
-        case callback: Function1[Ihandle, Int] =>
-          val cb: CFuncPtr1[iup.IhandlePtr, CInt] = (ptr: iup.IhandlePtr) => callback(ptr).ret
-
-          iup.IupSetCallback(ih, atom(name), cb)
+        case callback: Function1[_, _] =>
+          iup.IupSetCallback(ih, atom(name), (ptr: IhandlePtr) => callback.asInstanceOf[Ihandle => IupReturn](ptr).ret)
       }
     }
 
