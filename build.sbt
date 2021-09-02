@@ -17,7 +17,8 @@ scalacOptions ++= Seq("-deprecation",
                       "-unchecked",
                       "-language:postfixOps",
                       "-language:implicitConversions",
-                      "-language:existentials")
+                      "-language:existentials",
+                      "-language:dynamics")
 
 organization := "io.github.edadma"
 
