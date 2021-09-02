@@ -83,11 +83,10 @@ package object facade {
     def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
       valueOrCallback match {
         case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
-        case callback: Function1[_, _] =>
-          iup.IupSetCallback(ih,
-                             atom(name),
-                             CFuncPtr1.fromScalaFunction /*[iup.IhandlePtr, CInt]*/ (
-                               Util.wrapCallback(callback.asInstanceOf[Ihandle => IupReturn])))
+        case callback: Function1[Ihandle, Int] =>
+          val cb: CFuncPtr1[iup.IhandlePtr, CInt] = (ptr: iup.IhandlePtr) => callback(ptr).ret
+
+          iup.IupSetCallback(ih, atom(name), cb)
       }
     }
 

@@ -1,7 +1,7 @@
-import io.github.edadma.iup.extern.LibIUP
+import io.github.edadma.iup.extern.LibIUP.{IhandlePtr, IupSetCallback}
 import io.github.edadma.iup.facade._
 
-import scala.scalanative.unsafe.{CQuote, Zone, toCString}
+import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
 
 //object Main extends App {
 //
@@ -38,7 +38,7 @@ import scala.scalanative.unsafe.{CQuote, Zone, toCString}
 object Main extends App {
 
   def btn_exit_cb(self: Ihandle): IupReturn = {
-    IupMessage("Hello World Message", "Hello world from IUP.");
+    IupMessage("Hello World Message", "Hello world from IUP.")
 
     /* Exits the main loop */
     IUP_CLOSE
@@ -56,7 +56,11 @@ object Main extends App {
   dlg.TITLE = "Hello World 3"
 
   /* Registers callbacks */
-  button.ACTION = btn_exit_cb _
+//  val btn                             = btn_exit_cb _
+//  val cb: CFuncPtr1[IhandlePtr, CInt] = /*Util.wrapCallback(btn_exit_cb)*/ (ptr: IhandlePtr) => btn(ptr).ret
+
+  IupSetCallback(button.ih, c"ACTION", /*cb*/ /*(ptr: IhandlePtr) => btn_exit_cb(ptr).ret*/ Util.wrapCallback(btn_exit_cb))
+//  button.ACTION = Callback.btn_exit_cb _
 
   dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
 

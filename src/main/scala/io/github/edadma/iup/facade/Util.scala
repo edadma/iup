@@ -6,7 +6,6 @@ import scala.scalanative.unsafe._
 
 object Util {
 
-  def wrapCallback(callback: (Ihandle => IupReturn)): iup.IhandlePtr => CInt /*: iup.Icallback*/ =
-    (ptr: iup.IhandlePtr) => callback(ptr).ret
+  def wrapCallback(callback: Ihandle => IupReturn): iup.Icallback = (ptr: iup.IhandlePtr) => callback(ptr).ret
 
 }
