@@ -1,4 +1,7 @@
+import io.github.edadma.iup.extern.LibIUP
 import io.github.edadma.iup.facade._
+
+import scala.scalanative.unsafe.{CQuote, Zone, toCString}
 
 //object Main extends App {
 //
@@ -27,5 +30,4 @@ object Main extends App {
 
   IupMainLoop
   IupClose()
-
 }
