@@ -2,6 +2,7 @@ package io.github.edadma.iup
 
 import io.github.edadma.iup.extern.{LibIUP => iup}
 
+import scala.collection.mutable
 import scala.scalanative.unsafe._
 import scala.scalanative.unsigned._
 
@@ -34,6 +35,19 @@ package object facade {
   lazy val IUP_TOPPARENT: IupPosition    = IUP_LEFTPARENT
   lazy val IUP_BOTTOMPARENT: IupPosition = IUP_RIGHTPARENT
 
+  private lazy val atomZone = Zone.open() // only for UI attributes and text (const* char) which change seldomly if ever; gets closed by IupClose()
+  private lazy val atoms    = mutable.HashMap[String, CString]()
+
+  private def atom(s: String) =
+    atoms get s match {
+      case Some(value) => value
+      case None =>
+        val res = toCString(s)(atomZone)
+
+        atoms(s) = res
+        res
+    }
+
   private def copyChild(child: Seq[Ihandle])(implicit z: Zone): Ptr[iup.Ihandle_] = {
     val cs = alloc[iup.Ihandle_]((child.length + 1).toUInt)
 
@@ -49,8 +63,8 @@ package object facade {
   implicit class Ihandle(val ih: iup.Ihandle_) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
 
-    def updateDynamic(name: String)(value: String): Ihandle = Zone { implicit z =>
-      iup.IupSetAttribute(ih, toCString(name), toCString(value))
+    def updateDynamic(name: String)(value: String): Ihandle = {
+      iup.IupSetAttribute(ih, atom(name), atom(value))
       this
     }
 
@@ -63,8 +77,11 @@ package object facade {
 
   // Main API
 
-  def IupOpen: IupResut    = iup.IupOpen(null, null)
-  def IupClose(): Unit     = iup.IupClose()
+  def IupOpen: IupResut = iup.IupOpen(null, null)
+  def IupClose(): Unit = {
+    iup.IupClose()
+    atomZone.close()
+  }
   def IupIsOpened: Boolean = iup.IupIsOpened
 
   def IupMainLoop: IupResut = iup.IupMainLoop
@@ -74,7 +91,7 @@ package object facade {
   def IupVbox(child: Ihandle*): Ihandle = Zone(implicit z => iup.IupVboxv(copyChild(child)))
 
   def IupDialog(child: Ihandle): Ihandle = iup.IupDialog(child.ih)
-  def IupLabel(title: String): Ihandle   = Zone(implicit z => iup.IupLabel(toCString(title)))
+  def IupLabel(title: String): Ihandle   = iup.IupLabel(atom(title))
 
   // Utilities
 
