@@ -78,16 +78,9 @@ package object facade {
 
   private implicit def cint2boolean(v: CInt): Boolean = if (v == 0) false else true
 
-  val callbackMap = new mutable.HashMap[Ihandle, () => IupReturn]
+  private val callbackMap = new mutable.HashMap[Ihandle, () => IupReturn]
 
-  def internalCallback(self: iup.IhandlePtr): CInt = {
-    callbackMap get self match {
-      case Some(cb) => cb().value
-      case None =>
-        println("callback not found")
-        sys.exit(1)
-    }
-  }
+  private def internalCallback(self: iup.IhandlePtr): CInt = callbackMap(self)().value
 
   implicit class Ihandle(val ih: iup.IhandlePtr) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
@@ -95,8 +88,8 @@ package object facade {
     def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
       valueOrCallback match {
         case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
-        case callback: (() => IupReturn) =>
-          callbackMap(ih) = callback
+        case callback: Function0[_] =>
+          callbackMap(ih) = callback.asInstanceOf[() => IupReturn]
           iup.IupSetCallback(ih, atom(name), internalCallback _)
       }
     }
