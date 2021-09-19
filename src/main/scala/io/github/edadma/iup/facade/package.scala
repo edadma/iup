@@ -10,11 +10,11 @@ import scala.scalanative.unsigned._
 package object facade {
 
   // Common Flags and Return Values
-  implicit class IupResut(val res: CInt) extends AnyVal
+  implicit class IupResult(val res: CInt) extends AnyVal
 
-  lazy val IUP_ERROR: IupResut   = IupResut(1)
-  lazy val IUP_NOERROR: IupResut = IupResut(0)
-  lazy val IUP_INVALID: IupResut = IupResut(-1)
+  lazy val IUP_ERROR: IupResult   = IupResult(1)
+  lazy val IUP_NOERROR: IupResult = IupResult(0)
+  lazy val IUP_INVALID: IupResult = IupResult(-1)
 
   lazy val IUP_OPENED: Int = -1
 
@@ -98,19 +98,19 @@ package object facade {
 //
 //    def int(attr: String, value: Int): Unit = {}
 
-    def IupShowXY(x: IupPosition, y: IupPosition): IupResut = iup.IupShowXY(ih, x.pos, y.pos)
+    def IupShowXY(x: IupPosition, y: IupPosition): IupResult = iup.IupShowXY(ih, x.pos, y.pos)
   }
 
   // Main API
 
-  def IupOpen: IupResut = iup.IupOpen(null, null)
+  def IupOpen: IupResult = iup.IupOpen(null, null)
   def IupClose(): Unit = {
     iup.IupClose()
     atomZone.close()
   }
   def IupIsOpened: Boolean = iup.IupIsOpened
 
-  def IupMainLoop: IupResut = iup.IupMainLoop
+  def IupMainLoop: IupResult = iup.IupMainLoop
 
   // Elements
 
