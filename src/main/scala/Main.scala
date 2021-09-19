@@ -91,22 +91,44 @@
 //
 //}
 
-import io.github.edadma.iup._
+////### [3.1 Main Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial3.html#Main_Dialog)
+//
+//import io.github.edadma.iup
+//
+//object Main extends App {
+//
+//  iup.open
+//
+//  val multitext = iup.text(null)(multiline = "yes", expand = "yes")
+//  val vbox      = iup.vbox(multitext)
+//  val dlg       = iup.dialog(vbox)(title = "Simple Notepad", size = "QUARTERxQUARTER")
+//
+//  dlg.showXY(iup.Position.CENTER, iup.Position.CENTER)
+//  iup.mainLoop
+//  iup.close()
+//
+//}
+
+//### [3.2 Adding a Menu](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial3.html#Adding_a_Menu)
+
+import io.github.edadma.iup
 
 object Main extends App {
 
-  if (open == Result.ERROR) {
-    println("Error opening window")
-    sys.exit(1)
-  }
+  iup.open
 
-  val lbl = label("Hello world from IUP.")
-  val btn = button("OK", null)(action = (_: Handle) => Return.CLOSE)
-  val vbx = vbox(lbl, btn)(alignment = "acenter", gap = 10, margin = 30 x 10)
-  val dlg = dialog(vbx)(title = "Hello World 5")
+  val multitext   = iup.text(null)(multiline = "yes", expand = "yes")
+  val item_open   = iup.item("Open", null)
+  val item_saveas = iup.item("Save As", null)
+  val item_exit   = iup.item("Exit", null)(action = (_: iup.Handle) => iup.Return.CLOSE)
+  val file_menu   = iup.menu(item_open, item_saveas, iup.separator, item_exit)
+  val sub1_menu   = iup.submenu("File", file_menu)
+  val menu        = iup.menu(sub1_menu)
+  val vbox        = iup.vbox(multitext)
+  val dlg         = iup.dialog(vbox)(MENU = menu, title = "Simple Notepad", size = "QUARTERxQUARTER")
 
-  dlg.showXY(Position.CENTER, Position.CENTER)
-  mainLoop
-  close()
+  dlg.showXY(iup.Position.CENTER, iup.Position.CENTER)
+  iup.mainLoop
+  iup.close()
 
 }
