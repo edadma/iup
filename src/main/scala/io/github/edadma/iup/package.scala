@@ -12,14 +12,12 @@ package object iup {
   // Common Flags and Return Values
   implicit class Result(val res: CInt) extends AnyVal
   object Result {
-    final val ERROR: Result   = Result(1)
-    final val NOERROR: Result = Result(0)
-    final val INVALID: Result = Result(-1)
+    final val ERROR: Result      = Result(1)
+    final val NOERROR: Result    = Result(0)
+    final val OPENED: Result     = Result(-1)
+    final val INVALID: Result    = Result(-1)
+    final val INVALID_ID: Result = Result(-10)
   }
-
-  lazy val IUP_OPENED: Int = -1
-
-  // Callback Return Values
 
   // IupPopup and IupShowXY Parameter Values
   implicit class Position(val pos: CInt) extends AnyVal
@@ -46,6 +44,12 @@ package object iup {
     final val CLOSE: Return    = Return(-3)
     final val CONTINUE: Return = Return(-4)
   }
+
+  lazy val BUTTON1 = '1'
+  lazy val BUTTON2 = '2'
+  lazy val BUTTON3 = '3'
+  lazy val BUTTON4 = '4'
+  lazy val BUTTON5 = '5'
 
   // atom allocation Zone is for 'const char*' string arguments
   //   it was discovered that, in this library, strings that are declared 'const char*' can't be freed, at least
