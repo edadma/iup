@@ -52,9 +52,39 @@ import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
 //
 //  val button = IupButton("OK", null);
 //  val vbox   = IupVbox(button);
-//  val dlg    = IupDialog(IupVbox(vbox))
+//  val dlg    = IupDialog(vbox)
 //
 //  dlg.TITLE = "Hello World 3"
+//
+//  /* Registers callbacks */
+//  button.ACTION = btn_exit_cb
+//
+//  dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
+//
+//  IupMainLoop
+//
+//  IupClose()
+//
+//}
+
+//object Main extends App {
+//
+//  val btn_exit_cb =
+//    (h: Ihandle) =>
+//      /* Exits the main loop */
+//    IUP_CLOSE
+//
+//  if (IupOpen == IUP_ERROR) {
+//    println("Error opening window")
+//    sys.exit(1)
+//  }
+//
+//  val label  = IupLabel("Hello world from IUP.")
+//  val button = IupButton("OK", null)
+//  val vbox   = IupVbox(label, button)
+//  val dlg    = IupDialog(vbox)
+//
+//  dlg.TITLE = "Hello World 4"
 //
 //  /* Registers callbacks */
 //  button.ACTION = btn_exit_cb
@@ -81,10 +111,16 @@ object Main extends App {
 
   val label  = IupLabel("Hello world from IUP.")
   val button = IupButton("OK", null)
-  val vbox   = IupVbox(label, button)
-  val dlg    = IupDialog(vbox)
+  val vbox =
+    IupVbox(label, button)
 
-  dlg.TITLE = "Hello World 4"
+  vbox.ALIGNMENT = "acenter"
+  vbox.GAP = "10"
+  vbox.MARGIN = "10x10"
+
+  val dlg = IupDialog(vbox)
+
+  dlg.TITLE = "Hello World 5"
 
   /* Registers callbacks */
   button.ACTION = btn_exit_cb

@@ -49,8 +49,8 @@ package object facade {
   //   until the element is displayed.  So, to be safe, they are never free (but also never duplicated) until
   //   the UI is closed
   // only for UI attributes and text which change seldomly if ever; gets closed by IupClose()
-  private lazy val atomZone = Zone.open()
-  private lazy val atoms    = mutable.HashMap[String, CString]()
+  private lazy implicit val atomZone: Zone = Zone.open()
+  private lazy val atoms                   = new mutable.HashMap[String, CString]
 
   private def atom(s: String) =
     s match {
@@ -59,15 +59,15 @@ package object facade {
         atoms get s match {
           case Some(value) => value
           case None =>
-            val res = toCString(s)(atomZone)
+            val res = toCString(s)
 
             atoms(s) = res
             res
         }
     }
 
-  private def copyChild(child: Seq[Ihandle]) /*(implicit z: Zone)*/: Ptr[iup.IhandlePtr] = { // todo: change back to implicit Zone
-    val cs = alloc[iup.IhandlePtr]((child.length + 1).toUInt)(tagof[iup.IhandlePtr], atomZone)
+  private def copyChild(child: Seq[Ihandle]): Ptr[iup.IhandlePtr] = {
+    val cs = alloc[iup.IhandlePtr]((child.length + 1).toUInt)
 
     for ((c, i) <- child.zipWithIndex)
       cs(i) = c.ih
