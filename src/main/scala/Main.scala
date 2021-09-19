@@ -95,15 +95,13 @@ import io.github.edadma.iup._
 
 object Main extends App {
 
-  val buttonExitCallback = (h: Handle) => Return.CLOSE
-
   if (open == Result.ERROR) {
     println("Error opening window")
     sys.exit(1)
   }
 
   val lbl = label("Hello world from IUP.")
-  val btn = button("OK", null)(action = buttonExitCallback)
+  val btn = button("OK", null)(action = (_: Handle) => Return.CLOSE)
   val vbx = vbox(lbl, btn)(alignment = "acenter", gap = 10, margin = 30 x 10)
   val dlg = dialog(vbx)(title = "Hello World 5")
 
