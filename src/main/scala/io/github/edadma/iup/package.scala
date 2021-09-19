@@ -95,10 +95,16 @@ package object iup {
   implicit class Ihandle(val ih: lib.IhandlePtr) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
 
-    def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
-      valueOrCallback match {
-        case value: String             => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(value))
-        case value: Int                => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(value.toString))
+    def applyDynamicNamed(method: String)(attrs: (String, Any)*): Ihandle =
+      if (method == "apply") {
+        attrs foreach { case (k, v) => updateDynamic(k)(v) }
+        this
+      } else sys.error(s"invalid method: '$method'")
+
+    def updateDynamic(name: String)(value: Any): Unit = {
+      value match {
+        case s: String                 => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(s))
+        case n: Int                    => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(n.toString))
         case (width: Int, height: Int) => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(s"${width}x$height"))
         case callback: Function1[_, _] =>
           callbackMap(ih) = (this, callback.asInstanceOf[Ihandle => IupReturn])

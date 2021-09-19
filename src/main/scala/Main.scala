@@ -95,10 +95,7 @@ import io.github.edadma.iup._
 
 object Main extends App {
 
-  val btn_exit_cb =
-    (h: Ihandle) =>
-      /* Exits the main loop */
-    IUP_CLOSE
+  val buttonExitCallback = (h: Ihandle) => IUP_CLOSE
 
   if (IupOpen == IUP_ERROR) {
     println("Error opening window")
@@ -106,25 +103,12 @@ object Main extends App {
   }
 
   val label  = IupLabel("Hello world from IUP.")
-  val button = IupButton("OK", null)
-  val vbox =
-    IupVbox(label, button)
-
-  vbox.alignment = "acenter"
-  vbox.gap = 10
-  vbox.margin = 30 x 10
-
-  val dlg = IupDialog(vbox)
-
-  dlg.title = "Hello World 5"
-
-  /* Registers callbacks */
-  button.action = btn_exit_cb
+  val button = IupButton("OK", null)(action = buttonExitCallback)
+  val vbox   = IupVbox(label, button)(alignment = "acenter", gap = 10, margin = 30 x 10)
+  val dlg    = IupDialog(vbox)(title = "Hello World 5")
 
   dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
-
   IupMainLoop
-
   IupClose()
 
 }
