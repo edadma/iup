@@ -38,7 +38,7 @@ import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
 
 object Main extends App {
 
-  def btn_exit_cb: IupReturn = {
+  val btn_exit_cb = (h: Ihandle) => {
     IupMessage("Hello World Message", "Hello world from IUP.")
 
     /* Exits the main loop */
@@ -57,7 +57,7 @@ object Main extends App {
   dlg.TITLE = "Hello World 3"
 
   /* Registers callbacks */
-  button.ACTION = btn_exit_cb _
+  button.ACTION = btn_exit_cb
 
   dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
 
