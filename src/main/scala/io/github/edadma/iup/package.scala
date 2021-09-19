@@ -102,7 +102,7 @@ package object iup {
   }
 
   implicit class Handle(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
-//    def selectDynamic(name: String): String = {}
+    def selectDynamic(name: String): String = fromCString(lib.IupGetAttribute(ptr, atom(name.toUpperCase)))
 
     def applyDynamicNamed(method: String)(attrs: (String, Any)*): Handle =
       if (method == "apply") {
@@ -123,6 +123,10 @@ package object iup {
         case handle: Handle => lib.IupSetAttributeHandle(ptr, atom(uname), handle.ptr)
       }
     }
+
+    def destroy(): Unit = lib.IupDestroy(ptr)
+
+    def popup(x: Position, y: Position): Int = lib.IupPopup(ptr, x.pos, y.pos)
 
     def showXY(x: Position, y: Position): Result = lib.IupShowXY(ptr, x.pos, y.pos)
   }
@@ -167,7 +171,6 @@ package object iup {
 //  def storeLanguageString(name: /*const*/ String, str: /*const*/ String): Unit = lib.IupStoreLanguageString(name, str)
 //  def getLanguageString(name: /*const*/ String): String = lib.IupGetLanguageString(name)
 //  def setLanguagePack(ih: Handle): Unit = lib.IupSetLanguagePack(ih)
-//  def destroy(ih: Handle): Unit = lib.IupDestroy(ih)
 //  def detach(child: Handle): Unit = lib.IupDetach(child)
 //  def append(ih: Handle, child: Handle): Handle = lib.IupAppend(ih, child)
 //  def insert(ih: Handle, ref_child: Handle, child: Handle): Handle = lib.IupInsert(ih, ref_child, child)
@@ -180,9 +183,7 @@ package object iup {
 //  def getDialog(ih: Handle): Handle = lib.IupGetDialog(ih)
 //  def getDialogChild(ih: Handle, name: /*const*/ String): Handle = lib.IupGetDialogChild(ih, name)
 //  def reparent(ih: Handle, new_parent: Handle, ref_child: Handle): Int = lib.IupReparent(ih, new_parent, ref_child)
-//  def popup(ih: Handle, x: Int, y: Int): Int = lib.IupPopup(ih, x, y)
 //  def show(ih: Handle): Int = lib.IupShow(ih)
-//  def showXY(ih: Handle, x: Int, y: Int): Int = lib.IupShowXY(ih, x, y)
 //  def hide(ih: Handle): Int = lib.IupHide(ih)
 //  def map(ih: Handle): Int = lib.IupMap(ih)
 //  def unmap(ih: Handle): Unit = lib.IupUnmap(ih)
@@ -193,7 +194,8 @@ package object iup {
 //  def setAttributes(ih: Handle, str: /*const*/ String): Handle = lib.IupSetAttributes(ih, str)
 //  def getAttributes(ih: Handle): String = lib.IupGetAttributes(ih)
 //  def setAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit = lib.IupSetAttribute(ih, name, value)
-//  def setStrAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit = lib.IupSetStrAttribute(ih, name, value)
+  def setStrAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit =
+    Zone(z => lib.IupSetStrAttribute(ih.ptr, toCString(name)(z), toCString(value)(z)))
 //  // def setStrf(ih: Handle, name: /*const*/ String, format: /*const*/ String): Unit = lib.IupSetStrf(ih, name, format)
 //  def setInt(ih: Handle, name: /*const*/ String, value: Int): Unit = lib.IupSetInt(ih, name, value)
 //  def setDouble(ih: Handle, name: /*const*/ String, value: Double): Unit = lib.IupSetDouble(ih, name, value)
@@ -363,7 +365,7 @@ package object iup {
 //  def fileDlg: Handle = lib.IupFileDlg()
 //  def messageDlg: Handle = lib.IupMessageDlg()
 //  def colorDlg: Handle = lib.IupColorDlg()
-//  def fontDlg: Handle = lib.IupFontDlg()
+  def fontDlg: Handle = lib.IupFontDlg
 //  def progressDlg: Handle = lib.IupProgressDlg()
 //  def getFile(arq: String): Int = lib.IupGetFile(arq)
   def message(title: String, msg: String): Unit = lib.IupMessage(atom(title), atom(msg))
