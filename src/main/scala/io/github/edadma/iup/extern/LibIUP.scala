@@ -322,5 +322,20 @@ object LibIUP {
                     marks: Ptr[CInt]): CInt                                                                    = extern //334
   def IupGetText(title: /*const*/ CString, text: CString, maxsize: CInt): CInt                                 = extern //336
   def IupGetColor(x: CInt, y: CInt, r: Ptr[CUnsignedChar], g: Ptr[CUnsignedChar], b: Ptr[CUnsignedChar]): CInt = extern //337
+  // def IupGetParam(title: /*const*/ CString, action: Iparamcb, user_data: Ptr[Unit], format: /*const*/ CString): CInt = extern //340
+//  def IupGetParamv(title: /*const*/ CString,
+//                   action: Iparamcb,
+//                   user_data: Ptr[Unit],
+//                   format: /*const*/ CString,
+//                   param_count: CInt,
+//                   param_extra: CInt,
+//                   param_data: Ptr[Ptr[Unit]]): CInt    = extern //341
+  def IupParam(format: /*const*/ CString): Ptr[Ihandle] = extern //342
+  // def IupParamBox(param: Ptr[Ihandle]): Ptr[Ihandle] = extern //343
+  def IupParamBoxv(param_array: Ptr[Ptr[Ihandle]]): Ptr[Ihandle]                         = extern //344
+  def IupLayoutDialog(dialog: Ptr[Ihandle]): Ptr[Ihandle]                                = extern //346
+  def IupElementPropertiesDialog(parent: Ptr[Ihandle], elem: Ptr[Ihandle]): Ptr[Ihandle] = extern //347
+  def IupGlobalsDialog(): Ptr[Ihandle]                                                   = extern //348
+  def IupClassInfoDialog(parent: Ptr[Ihandle]): Ptr[Ihandle]                             = extern //349
 
 }
