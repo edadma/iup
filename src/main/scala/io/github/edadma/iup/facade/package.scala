@@ -93,10 +93,10 @@ package object facade {
 
     def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
       valueOrCallback match {
-        case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
+        case value: String => iup.IupSetAttribute(ih, atom(name.toUpperCase), atom(value))
         case callback: Function1[_, _] =>
           callbackMap(ih) = (this, callback.asInstanceOf[Ihandle => IupReturn])
-          iup.IupSetCallback(ih, atom(name), internalCallback _)
+          iup.IupSetCallback(ih, atom(name.toUpperCase), internalCallback _)
       }
     }
 

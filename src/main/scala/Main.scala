@@ -114,16 +114,16 @@ object Main extends App {
   val vbox =
     IupVbox(label, button)
 
-  vbox.ALIGNMENT = "acenter"
-  vbox.GAP = "10"
-  vbox.MARGIN = "10x10"
+  vbox.alignment = "acenter"
+  vbox.gap = "10"
+  vbox.margin = "10x10"
 
   val dlg = IupDialog(vbox)
 
-  dlg.TITLE = "Hello World 5"
+  dlg.title = "Hello World 5"
 
   /* Registers callbacks */
-  button.ACTION = btn_exit_cb
+  button.action = btn_exit_cb
 
   dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
 
