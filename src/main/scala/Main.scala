@@ -1,6 +1,7 @@
 //import io.github.edadma.iup.extern.{LibIUP => iup}
 import io.github.edadma.iup.facade._
 
+import scala.collection.mutable
 import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
 
 //object Main extends App {
@@ -37,7 +38,7 @@ import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
 
 object Main extends App {
 
-  def btn_exit_cb(self: Ihandle) = {
+  def btn_exit_cb: IupReturn = {
     IupMessage("Hello World Message", "Hello world from IUP.")
 
     /* Exits the main loop */

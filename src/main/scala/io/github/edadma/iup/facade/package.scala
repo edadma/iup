@@ -37,7 +37,7 @@ package object facade {
   lazy val IUP_BOTTOMPARENT: IupPosition = IUP_RIGHTPARENT
 
   // Callback Return Values
-  implicit class IupReturn(val ret: CInt) extends AnyVal
+  implicit class IupReturn(val value: CInt) extends AnyVal
 
   lazy val IUP_IGNORE: IupReturn   = IupReturn(-1)
   lazy val IUP_DEFAULT: IupReturn  = IupReturn(-2)
@@ -78,14 +78,26 @@ package object facade {
 
   private implicit def cint2boolean(v: CInt): Boolean = if (v == 0) false else true
 
+  val callbackMap = new mutable.HashMap[Ihandle, () => IupReturn]
+
+  def internalCallback(self: iup.IhandlePtr): CInt = {
+    callbackMap get self match {
+      case Some(cb) => cb().value
+      case None =>
+        println("callback not found")
+        sys.exit(1)
+    }
+  }
+
   implicit class Ihandle(val ih: iup.IhandlePtr) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
 
     def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
       valueOrCallback match {
         case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
-        case callback: Function1[_, _] =>
-          iup.IupSetCallback(ih, atom(name), (ptr: IhandlePtr) => callback.asInstanceOf[Ihandle => IupReturn](ptr).ret)
+        case callback: (() => IupReturn) =>
+          callbackMap(ih) = callback
+          iup.IupSetCallback(ih, atom(name), internalCallback _)
       }
     }
 
