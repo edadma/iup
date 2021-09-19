@@ -125,7 +125,7 @@ package object iup {
   /************************************************************************/
   /*                        Main API                                      */
   /************************************************************************/
-  def open: Result = lib.IupOpen(null, null)
+  def open: Result = lib.IupOpen(null, null) // todo: why argc/argv?
   def close(): Unit = {
     lib.IupClose()
     atomZone.close()
