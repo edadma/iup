@@ -1,9 +1,3 @@
-//import io.github.edadma.iup.extern.{LibIUP => iup}
-import io.github.edadma.iup.facade._
-
-import scala.collection.mutable
-import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
-
 //object Main extends App {
 //
 //  if (IupOpen == IUP_ERROR) {
@@ -97,6 +91,8 @@ import scala.scalanative.unsafe.{CFuncPtr1, CInt, CQuote, Zone, toCString}
 //
 //}
 
+import io.github.edadma.iup._
+
 object Main extends App {
 
   val btn_exit_cb =
@@ -115,8 +111,8 @@ object Main extends App {
     IupVbox(label, button)
 
   vbox.alignment = "acenter"
-  vbox.gap = "10"
-  vbox.margin = "10x10"
+  vbox.gap = 10
+  vbox.margin = 30 x 10
 
   val dlg = IupDialog(vbox)
 

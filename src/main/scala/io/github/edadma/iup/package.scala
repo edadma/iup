@@ -1,13 +1,13 @@
-package io.github.edadma.iup
+package io.github.edadma
 
-import io.github.edadma.iup.extern.LibIUP.IhandlePtr
-import io.github.edadma.iup.extern.{LibIUP => iup}
-
-import scala.collection.mutable
 import scala.scalanative.unsafe._
 import scala.scalanative.unsigned._
 
-package object facade {
+import scala.collection.mutable
+
+import io.github.edadma.iup.extern.{LibIUP => lib}
+
+package object iup {
 
   // Common Flags and Return Values
   implicit class IupResult(val res: CInt) extends AnyVal
@@ -66,8 +66,8 @@ package object facade {
         }
     }
 
-  private def copyChild(child: Seq[Ihandle]): Ptr[iup.IhandlePtr] = {
-    val cs = alloc[iup.IhandlePtr]((child.length + 1).toUInt)
+  private def copyChild(child: Seq[Ihandle]): Ptr[lib.IhandlePtr] = {
+    val cs = alloc[lib.IhandlePtr]((child.length + 1).toUInt)
 
     for ((c, i) <- child.zipWithIndex)
       cs(i) = c.ih
@@ -80,52 +80,58 @@ package object facade {
 
   // the callback map also stores the a reference to the object for which the callback was set
   //   so that it doesn't necessarily have to be a value class
-  private val callbackMap = new mutable.HashMap[iup.IhandlePtr, (Ihandle, Ihandle => IupReturn)]
+  private val callbackMap = new mutable.HashMap[lib.IhandlePtr, (Ihandle, Ihandle => IupReturn)]
 
-  private def internalCallback(self: iup.IhandlePtr): CInt = {
+  private def internalCallback(self: lib.IhandlePtr): CInt = {
     val (arg, func) = callbackMap(self)
 
     func(arg).value
   }
 
-  implicit class Ihandle(val ih: iup.IhandlePtr) extends AnyVal with Dynamic {
+  implicit class Width(width: Int) {
+    def x(height: Int): (Int, Int) = (width, height)
+  }
+
+  implicit class Ihandle(val ih: lib.IhandlePtr) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
 
     def updateDynamic(name: String)(valueOrCallback: Any): Unit = {
       valueOrCallback match {
-        case value: String => iup.IupSetAttribute(ih, atom(name.toUpperCase), atom(value))
+        case value: String             => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(value))
+        case value: Int                => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(value.toString))
+        case (width: Int, height: Int) => lib.IupSetAttribute(ih, atom(name.toUpperCase), atom(s"${width}x$height"))
         case callback: Function1[_, _] =>
           callbackMap(ih) = (this, callback.asInstanceOf[Ihandle => IupReturn])
-          iup.IupSetCallback(ih, atom(name.toUpperCase), internalCallback _)
+          lib.IupSetCallback(ih, atom(name.toUpperCase), internalCallback _)
       }
     }
 
-    def IupShowXY(x: IupPosition, y: IupPosition): IupResult = iup.IupShowXY(ih, x.pos, y.pos)
+    def IupShowXY(x: IupPosition, y: IupPosition): IupResult = lib.IupShowXY(ih, x.pos, y.pos)
   }
 
   // Main API
 
-  def IupOpen: IupResult = iup.IupOpen(null, null)
+  def IupOpen: IupResult = lib.IupOpen(null, null)
   def IupClose(): Unit = {
-    iup.IupClose()
+    lib.IupClose()
     atomZone.close()
   }
-  def IupIsOpened: Boolean = iup.IupIsOpened
+  def IupIsOpened: Boolean = lib.IupIsOpened
 
-  def IupMainLoop: IupResult = iup.IupMainLoop
+  def IupMainLoop: IupResult = lib.IupMainLoop
 
   // Elements
 
-  def IupVbox(child: Ihandle*): Ihandle = iup.IupVboxv(copyChild(child))
+  def IupVbox(child: Ihandle*): Ihandle = lib.IupVboxv(copyChild(child))
 
-  def IupButton(title: String, action: String): Ihandle = iup.IupButton(atom(title), atom(action))
-  def IupDialog(child: Ihandle): Ihandle                = iup.IupDialog(child.ih)
-  def IupLabel(title: String): Ihandle                  = iup.IupLabel(atom(title))
+  def IupButton(title: String, action: String): Ihandle = lib.IupButton(atom(title), atom(action))
+  def IupDialog(child: Ihandle): Ihandle                = lib.IupDialog(child.ih)
+  def IupLabel(title: String): Ihandle                  = lib.IupLabel(atom(title))
 
   // Utilities
 
   // Pre-defined dialogs
 
-  def IupMessage(title: String, msg: String): Unit = iup.IupMessage(atom(title), atom(msg))
+  def IupMessage(title: String, msg: String): Unit = lib.IupMessage(atom(title), atom(msg))
 
 }
