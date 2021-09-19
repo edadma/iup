@@ -78,9 +78,15 @@ package object facade {
 
   private implicit def cint2boolean(v: CInt): Boolean = if (v == 0) false else true
 
-  private val callbackMap = new mutable.HashMap[Ihandle, Ihandle => IupReturn]
+  // the callback map also stores the a reference to the object for which the callback was set
+  //   so that it doesn't necessarily have to be a value class
+  private val callbackMap = new mutable.HashMap[iup.IhandlePtr, (Ihandle, Ihandle => IupReturn)]
 
-  private def internalCallback(self: iup.IhandlePtr): CInt = callbackMap(self)(self).value
+  private def internalCallback(self: iup.IhandlePtr): CInt = {
+    val (arg, func) = callbackMap(self)
+
+    func(arg).value
+  }
 
   implicit class Ihandle(val ih: iup.IhandlePtr) extends AnyVal with Dynamic {
 //    def selectDynamic(name: String): String = {}
@@ -89,14 +95,10 @@ package object facade {
       valueOrCallback match {
         case value: String => iup.IupSetAttribute(ih, atom(name), atom(value))
         case callback: Function1[_, _] =>
-          callbackMap(ih) = callback.asInstanceOf[Ihandle => IupReturn]
+          callbackMap(ih) = (this, callback.asInstanceOf[Ihandle => IupReturn])
           iup.IupSetCallback(ih, atom(name), internalCallback _)
       }
     }
-
-//    def int(attr: String): Int = {}
-//
-//    def int(attr: String, value: Int): Unit = {}
 
     def IupShowXY(x: IupPosition, y: IupPosition): IupResult = iup.IupShowXY(ih, x.pos, y.pos)
   }
@@ -114,7 +116,7 @@ package object facade {
 
   // Elements
 
-  def IupVbox(child: Ihandle*): Ihandle = /*Zone(implicit z =>*/ iup.IupVboxv(copyChild(child)) //)
+  def IupVbox(child: Ihandle*): Ihandle = iup.IupVboxv(copyChild(child))
 
   def IupButton(title: String, action: String): Ihandle = iup.IupButton(atom(title), atom(action))
   def IupDialog(child: Ihandle): Ihandle                = iup.IupDialog(child.ih)
