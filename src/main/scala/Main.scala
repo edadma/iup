@@ -137,9 +137,9 @@
 
 import java.nio.file.{Files, Paths}
 
-import io.github.edadma.iup
-
 import scala.util.{Failure, Success}
+
+import io.github.edadma.iup
 
 object Main extends App {
 

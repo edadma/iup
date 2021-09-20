@@ -101,7 +101,13 @@ package object iup {
     }
   }
 
+  class IntAccess(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
+    def selectDynamic(name: String): Int = lib.IupGetInt(ptr, atom(name.toUpperCase))
+  }
+
   implicit class Handle(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
+    def int = new IntAccess(ptr)
+
     def selectDynamic(name: String): String = fromCString(lib.IupGetAttribute(ptr, atom(name.toUpperCase)))
 
     def applyDynamicNamed(method: String)(attrs: (String, Any)*): Handle =
@@ -362,7 +368,7 @@ package object iup {
   /************************************************************************/
   /*                      Pre-defined dialogs                             */
   /************************************************************************/
-//  def fileDlg: Handle = lib.IupFileDlg()
+  def fileDlg: Handle = lib.IupFileDlg
 //  def messageDlg: Handle = lib.IupMessageDlg()
 //  def colorDlg: Handle = lib.IupColorDlg()
   def fontDlg: Handle = lib.IupFontDlg
