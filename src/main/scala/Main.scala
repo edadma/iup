@@ -140,6 +140,7 @@ import java.nio.file.{Files, Paths}
 import scala.util.{Failure, Success}
 
 import io.github.edadma.iup
+import io.github.edadma.iup.Position
 
 object Main extends App {
 
@@ -158,6 +159,20 @@ object Main extends App {
       case e: Exception => iup.message("Error", e.getMessage)
     }
 
+  def open_cb(): Unit = {
+    val filedlg = iup.fileDlg.set(dialogtype = "open", extfilter = "Text Files|*.txt|All Files|*.*|")
+
+    filedlg.popup(Position.CENTER, Position.CENTER)
+
+    if (filedlg.int.status != -1) {
+      val filename = filedlg.value
+      val str      = read_file(filename)
+
+      if (str != null)
+        multitext.setS
+    }
+  }
+
   iup.open
 
   val multitext   = iup.text(null)(multiline = "yes", expand = "yes")
@@ -170,7 +185,7 @@ object Main extends App {
   val vbox        = iup.vbox(multitext)
   val dlg         = iup.dialog(vbox)(MENU = menu, title = "Simple Notepad", size = "QUARTERxQUARTER")
 
-  dlg.showXY(iup.Position.CENTER, iup.Position.CENTER)
+  dlg.showXY(Position.CENTER, Position.CENTER)
   iup.mainLoop
   iup.close()
 
