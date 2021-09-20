@@ -157,7 +157,7 @@ object Main extends App {
       case e: Exception => iup.message("Error", e.getMessage)
     }
 
-  def open_cb(): Return = {
+  val open_cb = () => {
     val filedlg = iup.fileDlg.set(dialogtype = "open", extfilter = "Text Files|*.txt|All Files|*.*|")
 
     filedlg.popup(Position.CENTER, Position.CENTER)
@@ -172,7 +172,7 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  def saveas_cb: Return = {
+  val saveas_cb = () => {
     val filedlg = iup.fileDlg.set(dialogtype = "save", extfilter = "Text Files|*.txt|All Files|*.*|")
 
     filedlg.popup(Position.CENTER, Position.CENTER)
@@ -184,7 +184,7 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  def fond_cb: Return = {
+  val fond_cb = () => {
     val fontdlg = iup.fontDlg
     val font    = multitext.font
 
@@ -198,21 +198,21 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  def about_cb: Return = {
+  val about_cb = () => {
     iup.message("About", "   Simple Notepad\n\nOriginal authors:\n Gustavo Lyrio\n Antonio Scuri")
     Return.DEFAULT
   }
 
-  def exit_cb: Return = Return.CLOSE
+  val exit_cb = () => Return.CLOSE
 
   iup.open
 
   val multitext       = iup.text(null)(multiline = "yes", expand = "yes")
-  val item_open       = iup.item("Open...", null)(action = open_cb _)
-  val item_saveas     = iup.item("Save As...", null)(action = saveas_cb _)
-  val item_exit       = iup.item("Exit", null)(action = exit_cb _)
-  val item_font       = iup.item("Font...", null)(action = fond_cb _)
-  val item_about      = iup.item("About...", null)(action = about_cb _)
+  val item_open       = iup.item("Open...", null)(action = open_cb)
+  val item_saveas     = iup.item("Save As...", null)(action = saveas_cb)
+  val item_exit       = iup.item("Exit", null)(action = exit_cb)
+  val item_font       = iup.item("Font...", null)(action = fond_cb)
+  val item_about      = iup.item("About...", null)(action = about_cb)
   val file_menu       = iup.menu(item_open, item_saveas, iup.separator, item_exit)
   val format_menu     = iup.menu(item_font)
   val help_menu       = iup.menu(item_about)
