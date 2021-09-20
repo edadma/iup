@@ -199,7 +199,7 @@ object Main extends App {
   }
 
   val about_cb = (_: Handle) => {
-    iup.message("About", "   Simple Notepad\n\nOriginal authors:\n Gustavo Lyrio\n Antonio Scuri")
+    iup.message("About", "Simple Notepad\n\nOriginal authors:\n Gustavo Lyrio\n Antonio Scuri")
     Return.DEFAULT
   }
 
