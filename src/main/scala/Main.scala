@@ -194,19 +194,34 @@ object Main extends App {
     if (fontdlg.int.status != -1)
       multitext.str.font = fontdlg.value
 
+    fontdlg.destroy()
+    Return.DEFAULT
   }
+
+  def about_cb: Return = {
+    iup.message("About", "   Simple Notepad\n\nOriginal authors:\n Gustavo Lyrio\n Antonio Scuri")
+    Return.DEFAULT
+  }
+
+  def exit_cb: Return = Return.CLOSE
 
   iup.open
 
-  val multitext   = iup.text(null)(multiline = "yes", expand = "yes")
-  val item_open   = iup.item("Open", null)
-  val item_saveas = iup.item("Save As", null)
-  val item_exit   = iup.item("Exit", null)(action = (_: iup.Handle) => iup.Return.CLOSE)
-  val file_menu   = iup.menu(item_open, item_saveas, iup.separator, item_exit)
-  val sub1_menu   = iup.submenu("File", file_menu)
-  val menu        = iup.menu(sub1_menu)
-  val vbox        = iup.vbox(multitext)
-  val dlg         = iup.dialog(vbox)(MENU = menu, title = "Simple Notepad", size = "QUARTERxQUARTER")
+  val multitext       = iup.text(null)(multiline = "yes", expand = "yes")
+  val item_open       = iup.item("Open...", null)(action = open_cb _)
+  val item_saveas     = iup.item("Save As...", null)(action = saveas_cb _)
+  val item_exit       = iup.item("Exit", null)(action = exit_cb _)
+  val item_font       = iup.item("Font...", null)(action = fond_cb _)
+  val item_about      = iup.item("About...", null)(action = about_cb _)
+  val file_menu       = iup.menu(item_open, item_saveas, iup.separator, item_exit)
+  val format_menu     = iup.menu(item_font)
+  val help_menu       = iup.menu(item_about)
+  val sub_menu_file   = iup.submenu("File", file_menu)
+  val sub_format_file = iup.submenu("Format", format_menu)
+  val sub_menu_help   = iup.submenu("Help", help_menu)
+  val menu            = iup.menu(sub_menu_file, sub_format_file, sub_menu_help)
+  val vbox            = iup.vbox(multitext)
+  val dlg             = iup.dialog(vbox)(menu = menu, title = "Simple Notepad", size = "QUARTERxQUARTER")
 
   dlg.showXY(Position.CENTER, Position.CENTER)
   iup.mainLoop
