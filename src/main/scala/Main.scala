@@ -165,7 +165,7 @@ object Main extends App {
     if (filedlg.int.status != -1)
       read_file(filedlg.value) match {
         case null =>
-        case str  => multitext.setStrAttribute("value", str)
+        case str  => multitext.str.value = str
       }
 
     filedlg.destroy()
@@ -182,6 +182,18 @@ object Main extends App {
 
     filedlg.destroy()
     Return.DEFAULT
+  }
+
+  def fond_cb: Return = {
+    val fontdlg = iup.fontDlg
+    val font    = multitext.font
+
+    fontdlg.str.value = font
+    fontdlg.popup(Position.CENTER, Position.CENTER)
+
+    if (fontdlg.int.status != -1)
+      multitext.str.font = fontdlg.value
+
   }
 
   iup.open

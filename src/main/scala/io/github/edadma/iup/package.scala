@@ -101,8 +101,12 @@ package object iup {
     }
   }
 
-  class IntAccess(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
+  class GetInt(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
     def selectDynamic(name: String): Int = lib.IupGetInt(ptr, atom(name.toUpperCase))
+  }
+
+  class SetStr(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
+    def updateDynamic(name: String)(value: String): Unit = ptr.setStrAttribute(name, value)
   }
 
   implicit class Handle(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
@@ -110,7 +114,9 @@ package object iup {
     /************************************************************************/
     /*                        Main API                                      */
     /************************************************************************/
-    def int = new IntAccess(ptr)
+    def int = new GetInt(ptr)
+
+    def str = new SetStr(ptr)
 
     def selectDynamic(name: String): String = fromCString(lib.IupGetAttribute(ptr, atom(name.toUpperCase)))
 
@@ -173,7 +179,7 @@ package object iup {
     //  def getAttributes(ih: Handle): String = lib.IupGetAttributes(ih)
     //  def setAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit = lib.IupSetAttribute(ih, name, value)
     def setStrAttribute(name: /*const*/ String, value: /*const*/ String): Unit =
-      Zone(z => lib.IupSetStrAttribute(ptr, toCString(name.toUpperCase)(z), toCString(value)(z)))
+      Zone(z => lib.IupSetStrAttribute(ptr, atom(name.toUpperCase), toCString(value)(z)))
     //  // def setStrf(ih: Handle, name: /*const*/ String, format: /*const*/ String): Unit = lib.IupSetStrf(ih, name, format)
     //  def setInt(ih: Handle, name: /*const*/ String, value: Int): Unit = lib.IupSetInt(ih, name, value)
     //  def setDouble(ih: Handle, name: /*const*/ String, value: Double): Unit = lib.IupSetDouble(ih, name, value)
