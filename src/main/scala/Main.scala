@@ -136,11 +136,9 @@
 //### [3.3 Using Pre-defined Dialogs](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial3.html#Using_Pre_Dialogs)
 
 import java.nio.file.{Files, Paths}
-
 import scala.util.{Failure, Success}
-
 import io.github.edadma.iup
-import io.github.edadma.iup.Position
+import io.github.edadma.iup.{Position, Return}
 
 object Main extends App {
 
@@ -159,18 +157,31 @@ object Main extends App {
       case e: Exception => iup.message("Error", e.getMessage)
     }
 
-  def open_cb(): Unit = {
+  def open_cb(): Return = {
     val filedlg = iup.fileDlg.set(dialogtype = "open", extfilter = "Text Files|*.txt|All Files|*.*|")
 
     filedlg.popup(Position.CENTER, Position.CENTER)
 
-    if (filedlg.int.status != -1) {
-      val filename = filedlg.value
-      val str      = read_file(filename)
+    if (filedlg.int.status != -1)
+      read_file(filedlg.value) match {
+        case null =>
+        case str  => multitext.setStrAttribute("value", str)
+      }
 
-      if (str != null)
-        multitext.setS
-    }
+    filedlg.destroy()
+    Return.DEFAULT
+  }
+
+  def saveas_cb: Return = {
+    val filedlg = iup.fileDlg.set(dialogtype = "save", extfilter = "Text Files|*.txt|All Files|*.*|")
+
+    filedlg.popup(Position.CENTER, Position.CENTER)
+
+    if (filedlg.int.status != -1)
+      write_file(filedlg.value, multitext.value)
+
+    filedlg.destroy()
+    Return.DEFAULT
   }
 
   iup.open

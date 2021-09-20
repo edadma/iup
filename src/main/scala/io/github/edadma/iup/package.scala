@@ -172,8 +172,8 @@ package object iup {
     //  def setAttributes(ih: Handle, str: /*const*/ String): Handle = lib.IupSetAttributes(ih, str)
     //  def getAttributes(ih: Handle): String = lib.IupGetAttributes(ih)
     //  def setAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit = lib.IupSetAttribute(ih, name, value)
-    def setStrAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit =
-      Zone(z => lib.IupSetStrAttribute(ih.ptr, toCString(name)(z), toCString(value)(z)))
+    def setStrAttribute(name: /*const*/ String, value: /*const*/ String): Unit =
+      Zone(z => lib.IupSetStrAttribute(ptr, toCString(name.toUpperCase)(z), toCString(value)(z)))
     //  // def setStrf(ih: Handle, name: /*const*/ String, format: /*const*/ String): Unit = lib.IupSetStrf(ih, name, format)
     //  def setInt(ih: Handle, name: /*const*/ String, value: Int): Unit = lib.IupSetInt(ih, name, value)
     //  def setDouble(ih: Handle, name: /*const*/ String, value: Double): Unit = lib.IupSetDouble(ih, name, value)
