@@ -138,7 +138,7 @@
 import java.nio.file.{Files, Paths}
 import scala.util.{Failure, Success}
 import io.github.edadma.iup
-import io.github.edadma.iup.{Position, Return}
+import io.github.edadma.iup.{Handle, Position, Return}
 
 object Main extends App {
 
@@ -157,7 +157,7 @@ object Main extends App {
       case e: Exception => iup.message("Error", e.getMessage)
     }
 
-  val open_cb = () => {
+  val open_cb = (_: Handle) => {
     val filedlg = iup.fileDlg.set(dialogtype = "open", extfilter = "Text Files|*.txt|All Files|*.*|")
 
     filedlg.popup(Position.CENTER, Position.CENTER)
@@ -172,7 +172,7 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  val saveas_cb = () => {
+  val saveas_cb = (_: Handle) => {
     val filedlg = iup.fileDlg.set(dialogtype = "save", extfilter = "Text Files|*.txt|All Files|*.*|")
 
     filedlg.popup(Position.CENTER, Position.CENTER)
@@ -184,7 +184,7 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  val fond_cb = () => {
+  val fond_cb = (_: Handle) => {
     val fontdlg = iup.fontDlg
     val font    = multitext.font
 
@@ -198,12 +198,12 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  val about_cb = () => {
+  val about_cb = (_: Handle) => {
     iup.message("About", "   Simple Notepad\n\nOriginal authors:\n Gustavo Lyrio\n Antonio Scuri")
     Return.DEFAULT
   }
 
-  val exit_cb = () => Return.CLOSE
+  val exit_cb = (_: Handle) => Return.CLOSE
 
   iup.open
 
