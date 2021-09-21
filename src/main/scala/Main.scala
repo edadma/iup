@@ -303,6 +303,8 @@ object Main extends App {
     Return.DEFAULT
   }
 
+  val item_exit_action_cb = (_: Handle) => Return.CLOSE
+
   val goto_ok_action_cb = (bt_ok: Handle) => {
     val line_count = bt_ok.int.text_linecount
     val txt        = bt_ok.getDialogChild("LINE_TEXT")
@@ -336,14 +338,12 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  val exit_cb = (_: Handle) => Return.CLOSE
-
   iup.open
 
   val multitext       = iup.text(null)(multiline = "yes", expand = "yes")
-  val item_open       = iup.item("Open...", null)(action = open_cb)
-  val item_saveas     = iup.item("Save As...", null)(action = saveas_cb)
-  val item_exit       = iup.item("Exit", null)(action = exit_cb)
+  val item_open       = iup.item("Open...", null)(action = item_open_action_cb)
+  val item_saveas     = iup.item("Save As...", null)(action = item_saveas_action_cb)
+  val item_exit       = iup.item("Exit", null)(action = item_exit_action_cb)
   val item_font       = iup.item("Font...", null)(action = fond_cb)
   val item_about      = iup.item("About...", null)(action = about_cb)
   val file_menu       = iup.menu(item_open, item_saveas, iup.separator, item_exit)
