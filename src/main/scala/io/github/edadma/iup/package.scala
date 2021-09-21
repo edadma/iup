@@ -108,12 +108,13 @@ package object iup {
   }
 
   class AttributeInt(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
-    def selectDynamic(name: String): Int = lib.IupGetInt(ptr, atom(name.toUpperCase))
+    def updateDynamic(name: String)(value: Int): Unit = ptr.setInt(name.toUpperCase, value)
+    def selectDynamic(name: String): Int              = ptr.getInt(name.toUpperCase)
   }
 
   class AttributeStr(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
     def updateDynamic(name: String)(value: String): Unit = ptr.setStrAttribute(name.toUpperCase, value)
-    def selectDynamic(name: String): String              = fromCString(lib.IupGetAttribute(ptr, atom(name.toUpperCase)))
+    def selectDynamic(name: String): String              = ptr.getAttribute(name.toUpperCase)
   }
 
   implicit class Handle(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
@@ -125,7 +126,7 @@ package object iup {
 
     def str = new AttributeStr(ptr)
 
-    def selectDynamic(name: String): String = fromCString(lib.IupGetAttribute(ptr, atom(name.toUpperCase)))
+    def selectDynamic(name: String): String = ptr.getAttribute(name.toUpperCase)
 
     def applyDynamicNamed(method: String)(attrs: (String, Any)*): Handle =
       if (method == "apply" || method == "set") {
@@ -187,14 +188,14 @@ package object iup {
     def getAttributes: String                        = fromCString(lib.IupGetAttributes(ptr))
     //  def setAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit = lib.IupSetAttribute(ih, name, value)
     def setStrAttribute(name: /*const*/ String, value: /*const*/ String): Unit =
-      Zone(z => lib.IupSetStrAttribute(ptr, atom(name.toUpperCase), toCString(value)(z)))
+      Zone(z => lib.IupSetStrAttribute(ptr, atom(name), toCString(value)(z)))
     //  // def setStrf(ih: Handle, name: /*const*/ String, format: /*const*/ String): Unit = lib.IupSetStrf(ih, name, format)
-    //  def setInt(ih: Handle, name: /*const*/ String, value: Int): Unit = lib.IupSetInt(ih, name, value)
+    def setInt(name: /*const*/ String, value: Int): Unit = lib.IupSetInt(ptr, atom(name), value)
     //  def setDouble(ih: Handle, name: /*const*/ String, value: Double): Unit = lib.IupSetDouble(ih, name, value)
     //  def setRGB(ih: Handle, name: /*const*/ String, r: Char, g: Char, b: Char): Unit = lib.IupSetRGB(ih, name, r, g, b)
     //  def setRGBA(ih: Handle, name: /*const*/ String, r: Char, g: Char, b: Char, a: Char): Unit = lib.IupSetRGBA(ih, name, r, g, b, a)
-    //  def getAttribute(ih: Handle, name: /*const*/ String): String = lib.IupGetAttribute(ih, name)
-    //  def getInt(ih: Handle, name: /*const*/ String): Int = lib.IupGetInt(ih, name)
+    def getAttribute(name: /*const*/ String): String = fromCString(lib.IupGetAttribute(ptr, atom(name)))
+    def getInt(name: /*const*/ String): Int          = lib.IupGetInt(ptr, atom(name))
     //  def getInt2(ih: Handle, name: /*const*/ String): Int = lib.IupGetInt2(ih, name)
     //  def getIntInt(ih: Handle, name: /*const*/ String, i1: Ptr[Int], i2: Ptr[Int]): Int = lib.IupGetIntInt(ih, name, i1, i2)
     //  def getDouble(ih: Handle, name: /*const*/ String): Double = lib.IupGetDouble(ih, name)
@@ -243,9 +244,22 @@ package object iup {
     /*                      Utilities                                       */
     /************************************************************************/
     //  def saveImageAsText(ih: Handle, filename: /*const*/ String, format: /*const*/ String, name: /*const*/ String): Int = lib.IupSaveImageAsText(ih, filename, format, name)
-    //  def textConvertLinColToPos(ih: Handle, lin: Int, col: Int, pos: Ptr[Int]): Unit = lib.IupTextConvertLinColToPos(ih, lin, col, pos)
-    //  def textConvertPosToLinCol(ih: Handle, pos: Int, lin: Ptr[Int], col: Ptr[Int]): Unit = lib.IupTextConvertPosToLinCol(ih, pos, lin, col)
-    //  def convertXYToPos(ih: Handle, x: Int, y: Int): Int = lib.IupConvertXYToPos(ih, x, y)
+    def textConvertLinColToPos(lin: Int, col: Int): Int = {
+      val pos = stackalloc[CInt]
+
+      lib.IupTextConvertLinColToPos(ptr, lin, col, pos)
+      !pos
+    }
+
+    def textConvertPosToLinCol(pos: Int): (Int, Int) = {
+      val lin = stackalloc[CInt]
+      val col = stackalloc[CInt]
+
+      lib.IupTextConvertPosToLinCol(ptr, pos, lin, col)
+      (!lin, !col)
+    }
+
+    def convertXYToPos(x: Int, y: Int): Int = lib.IupConvertXYToPos(ptr, x, y)
     //  def treeSetUserId(ih: Handle, id: Int, userid: Ptr[Unit]): Int = lib.IupTreeSetUserId(ih, id, userid)
     //  def treeGetUserId(ih: Handle, id: Int): Ptr[Unit] = lib.IupTreeGetUserId(ih, id)
     //  def treeGetId(ih: Handle, userid: Ptr[Unit]): Int = lib.IupTreeGetId(ih, userid)

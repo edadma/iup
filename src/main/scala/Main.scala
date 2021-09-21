@@ -337,8 +337,20 @@ object Main extends App {
     val bt_cancel = iup.button("Cancel", null)(action = goto_cancel_action_cb, padding = 10 x 2)
     val box =
       iup.vbox(lbl, txt, iup.hbox(iup.fill, bt_ok, bt_cancel) setAttributes "NORMALIZESIZE=HORIZONTAL")(margin = 10 x 10, gap = 5)
+    val dlg = iup.dialog(box)(title = "Go To Line",
+                              dialogframe = "yes",
+                              defaultenter = bt_ok,
+                              defaultesc = bt_cancel,
+                              parentdialog = item_goto.getDialog)
 
-    // line 229
+    dlg.popup(Position.CENTERPARENT, Position.CENTERPARENT)
+
+    if (dlg.int.status == 1) {
+      val line = txt.int.value
+      val pos  = multitext.textConvertLinColToPos(line, 0)
+
+      multitext.int.caretpos = pos
+    }
   }
 
   val fond_cb = (_: Handle) => {
