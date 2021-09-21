@@ -51,6 +51,18 @@ package object iup {
   lazy val BUTTON4 = '4'
   lazy val BUTTON5 = '5'
 
+  /************************************************************************/
+  /*                      Pre-Defined Masks                               */
+  /************************************************************************/
+  lazy val MASK_FLOAT       = "[+/-]?(/d+/.?/d*|/./d+)"
+  lazy val MASK_UFLOAT      = "(/d+/.?/d*|/./d+)"
+  lazy val MASK_EFLOAT      = "[+/-]?(/d+/.?/d*|/./d+)([eE][+/-]?/d+)?"
+  lazy val MASK_UEFLOAT     = "(/d+/.?/d*|/./d+)([eE][+/-]?/d+)?"
+  lazy val MASK_FLOATCOMMA  = "[+/-]?(/d+/,?/d*|/,/d+)"
+  lazy val MASK_UFLOATCOMMA = "(/d+/,?/d*|/,/d+)"
+  lazy val MASK_INT         = "[+/-]?/d+"
+  lazy val MASK_UINT        = "/d+"
+
   // atom allocation Zone is for 'const char*' string arguments
   //   it was discovered that, in this library, strings that are declared 'const char*' can't be freed, at least
   //   until the element is displayed.  So, to be safe, they are never free (but also never duplicated) until
@@ -93,12 +105,6 @@ package object iup {
     val (arg, func) = callbackMapType1(self)
 
     func(arg).value
-  }
-
-  object implicits {
-    implicit class Width(width: Int) {
-      def x(height: Int): (Int, Int) = (width, height)
-    }
   }
 
   class AttributeInt(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
@@ -162,7 +168,7 @@ package object iup {
     def getBrother: Handle                             = lib.IupGetBrother(ptr)
     def getParent: Handle                              = lib.IupGetParent(ptr)
     def getDialog: Handle                              = lib.IupGetDialog(ptr)
-    def getDialogChild(name: /*const*/ String): Handle = Zone(z => lib.IupGetDialogChild(ptr, toCString(name)(z)))
+    def getDialogChild(name: /*const*/ String): Handle = Zone(z => lib.IupGetDialogChild(ptr, toCString(name.toUpperCase)(z)))
     //  def reparent(ih: Handle, new_parent: Handle, ref_child: Handle): Int = lib.IupReparent(ih, new_parent, ref_child)
 
     def popup(x: Position, y: Position): Int = lib.IupPopup(ptr, x.pos, y.pos)
@@ -177,8 +183,8 @@ package object iup {
     //  def getAllAttributes(ih: Handle, names: Ptr[String], n: Int): Int = lib.IupGetAllAttributes(ih, names, n)
     //  def copyAttributes(src_ih: Handle, dst_ih: Handle): Unit = lib.IupCopyAttributes(src_ih, dst_ih)
     //  // def setAtt(handle_name: /*const*/ String, ih: Handle, name: /*const*/ String): Handle = lib.IupSetAtt(handle_name, ih, name)
-    //  def setAttributes(ih: Handle, str: /*const*/ String): Handle = lib.IupSetAttributes(ih, str)
-    def getAttributes: String = fromCString(lib.IupGetAttributes(ptr))
+    def setAttributes(str: /*const*/ String): Handle = Zone(z => lib.IupSetAttributes(ptr, toCString(str)(z)))
+    def getAttributes: String                        = fromCString(lib.IupGetAttributes(ptr))
     //  def setAttribute(ih: Handle, name: /*const*/ String, value: /*const*/ String): Unit = lib.IupSetAttribute(ih, name, value)
     def setStrAttribute(name: /*const*/ String, value: /*const*/ String): Unit =
       Zone(z => lib.IupSetStrAttribute(ptr, atom(name.toUpperCase), toCString(value)(z)))
@@ -313,26 +319,26 @@ package object iup {
   /************************************************************************/
   /*                        Elements                                      */
   /************************************************************************/
-//  def fill: Handle = lib.IupFill()
-//  def space: Handle = lib.IupSpace()
-//  def radio(child: Handle): Handle = lib.IupRadio(child)
+  def fill: Handle                    = lib.IupFill
+  def space: Handle                   = lib.IupSpace
+  def radio(child: Handle): Handle    = lib.IupRadio(child.ptr)
   def vbox(children: Handle*): Handle = lib.IupVboxv(copyChild(children))
 //  // def zbox(child: Handle): Handle = lib.IupZbox(child)
-//  def zboxv(children: Ptr[Handle]): Handle = lib.IupZboxv(children)
+  def zboxv(children: Handle*): Handle = lib.IupZboxv(copyChild(children))
 //  // def hbox(child: Handle): Handle = lib.IupHbox(child)
-//  def hboxv(children: Ptr[Handle]): Handle = lib.IupHboxv(children)
+  def hbox(children: Handle*): Handle = lib.IupHboxv(copyChild(children))
 //  // def normalizer(ih_first: Handle): Handle = lib.IupNormalizer(ih_first)
 //  def normalizerv(ih_list: Ptr[Handle]): Handle = lib.IupNormalizerv(ih_list)
 //  // def cbox(child: Handle): Handle = lib.IupCbox(child)
-//  def cboxv(children: Ptr[Handle]): Handle = lib.IupCboxv(children)
-//  def sbox(child: Handle): Handle = lib.IupSbox(child)
-//  def split(child1: Handle, child2: Handle): Handle = lib.IupSplit(child1, child2)
-//  def scrollBox(child: Handle): Handle = lib.IupScrollBox(child)
-//  def flatScrollBox(child: Handle): Handle = lib.IupFlatScrollBox(child)
+  def cbox(children: Handle*): Handle               = lib.IupCboxv(copyChild(children))
+  def sbox(child: Handle): Handle                   = lib.IupSbox(child.ptr)
+  def split(child1: Handle, child2: Handle): Handle = lib.IupSplit(child1.ptr, child2.ptr)
+  def scrollBox(child: Handle): Handle              = lib.IupScrollBox(child.ptr)
+  def flatScrollBox(child: Handle): Handle          = lib.IupFlatScrollBox(child.ptr)
 //  // def gridBox(child: Handle): Handle = lib.IupGridBox(child)
-//  def gridBoxv(children: Ptr[Handle]): Handle = lib.IupGridBoxv(children)
+  def gridBox(children: Handle*): Handle = lib.IupGridBoxv(copyChild(children))
 //  // def multiBox(child: Handle): Handle = lib.IupMultiBox(child)
-//  def multiBoxv(children: Ptr[Handle]): Handle = lib.IupMultiBoxv(children)
+  def multiBoxv(children: Handle*): Handle = lib.IupMultiBoxv(copyChild(children))
 //  def expander(child: Handle): Handle = lib.IupExpander(child)
 //  def detachBox(child: Handle): Handle = lib.IupDetachBox(child)
 //  def backgroundBox(child: Handle): Handle = lib.IupBackgroundBox(child)

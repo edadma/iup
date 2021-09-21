@@ -234,6 +234,7 @@
 import java.nio.file.{Files, Paths}
 import scala.util.{Failure, Success}
 import io.github.edadma.iup
+import io.github.edadma.iup.Implicits._
 import io.github.edadma.iup.{Handle, Position, Return}
 
 object Main extends App {
@@ -317,6 +318,27 @@ object Main extends App {
       bt_ok.getDialog.status = 1
       Return.CLOSE
     }
+  }
+
+  val goto_cancel_action_cb = (bt_ok: Handle) => {
+    bt_ok.getDialog.status = 0
+    Return.CLOSE
+  }
+
+  val item_goto_action_cb = (item_goto: Handle) => {
+    val multitext  = item_goto.getDialogChild("multitext")
+    val line_count = multitext.int.linecount
+    val lbl        = iup.label(null)
+
+    lbl.str.title = s"Line Number [1-$line_count]:"
+
+    val txt       = iup.text(null)(mask = iup.MASK_UINT, name = "line_text", visiblecolunms = 20)
+    val bt_ok     = iup.button("OK", null)(text_linecount = line_count, padding = 10 x 2, action = goto_ok_action_cb)
+    val bt_cancel = iup.button("Cancel", null)(action = goto_cancel_action_cb, padding = 10 x 2)
+    val box =
+      iup.vbox(lbl, txt, iup.hbox(iup.fill, bt_ok, bt_cancel) setAttributes "NORMALIZESIZE=HORIZONTAL")(margin = 10 x 10, gap = 5)
+
+    // line 229
   }
 
   val fond_cb = (_: Handle) => {
