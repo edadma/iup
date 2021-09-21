@@ -87,10 +87,10 @@ package object iup {
 
   // the callback map also stores the a reference to the object for which the callback was set
   //   so that it doesn't necessarily have to be a value class
-  private val callbackMap = new mutable.HashMap[lib.IhandlePtr, (Handle, Handle => Return)]
+  private val callbackMapType1 = new mutable.HashMap[lib.IhandlePtr, (Handle, Handle => Return)]
 
-  private def internalCallback(self: lib.IhandlePtr): CInt = {
-    val (arg, func) = callbackMap(self)
+  private def callbackType1(self: lib.IhandlePtr): CInt = {
+    val (arg, func) = callbackMapType1(self)
 
     func(arg).value
   }
@@ -128,15 +128,16 @@ package object iup {
       } else sys.error(s"invalid method: '$method'")
 
     def updateDynamic(name: String)(value: Any): Unit = {
-      val uname = name.toUpperCase
+      val uname          = name.toUpperCase
+      lazy val className = getClassName
 
       value match {
         case s: String                 => lib.IupSetAttribute(ptr, atom(uname), atom(s))
         case n: Int                    => lib.IupSetAttribute(ptr, atom(uname), atom(n.toString))
         case (width: Int, height: Int) => lib.IupSetAttribute(ptr, atom(uname), atom(s"${width}x$height"))
-        case callback: Function1[_, _] =>
-          callbackMap(ptr) = (this, callback.asInstanceOf[Handle => Return])
-          lib.IupSetCallback(ptr, atom(uname), internalCallback _)
+        case type1: Function1[_, _] =>
+          callbackMapType1(ptr) = (this, type1.asInstanceOf[Handle => Return])
+          lib.IupSetCallback(ptr, atom(uname), callbackType1 _)
         case handle: Handle => lib.IupSetAttributeHandle(ptr, atom(uname), handle.ptr)
       }
     }
@@ -158,10 +159,10 @@ package object iup {
     //  def getChildPos(ih: Handle, child: Handle): Int = lib.IupGetChildPos(ih, child)
     def getChildCount: Int = lib.IupGetChildCount(ptr)
     //  def getNextChild(ih: Handle, child: Handle): Handle = lib.IupGetNextChild(ih, child)
-    def getBrother: Handle = lib.IupGetBrother(ptr)
-    def getParent: Handle  = lib.IupGetParent(ptr)
-    def getDialog: Handle  = lib.IupGetDialog(ptr)
-    //  def getDialogChild(ih: Handle, name: /*const*/ String): Handle = lib.IupGetDialogChild(ih, name)
+    def getBrother: Handle                             = lib.IupGetBrother(ptr)
+    def getParent: Handle                              = lib.IupGetParent(ptr)
+    def getDialog: Handle                              = lib.IupGetDialog(ptr)
+    def getDialogChild(name: /*const*/ String): Handle = Zone(z => lib.IupGetDialogChild(ptr, toCString(name)(z)))
     //  def reparent(ih: Handle, new_parent: Handle, ref_child: Handle): Int = lib.IupReparent(ih, new_parent, ref_child)
 
     def popup(x: Position, y: Position): Int = lib.IupPopup(ptr, x.pos, y.pos)

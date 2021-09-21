@@ -274,10 +274,11 @@ object Main extends App {
       case e: Exception => iup.message("Error", e.getMessage)
     }
 
-  val open_cb = (_: Handle) => {
-    val filedlg = iup.fileDlg.set(dialogtype = "open", extfilter = "Text Files|*.txt|All Files|*.*|")
+  val item_open_action_cb = (item_open: Handle) => {
+    val filedlg =
+      iup.fileDlg.set(dialogtype = "open", extfilter = "Text Files|*.txt|All Files|*.*|", parentdialog = item_open.getDialog)
 
-    filedlg.popup(Position.CENTER, Position.CENTER)
+    filedlg.popup(Position.CENTERPARENT, Position.CENTERPARENT)
 
     if (filedlg.int.status != -1)
       read_file(filedlg.value) match {
@@ -289,16 +290,31 @@ object Main extends App {
     Return.DEFAULT
   }
 
-  val saveas_cb = (_: Handle) => {
-    val filedlg = iup.fileDlg.set(dialogtype = "save", extfilter = "Text Files|*.txt|All Files|*.*|")
+  val item_saveas_action_cb = (item_saveas: Handle) => {
+    val filedlg =
+      iup.fileDlg.set(dialogtype = "save", extfilter = "Text Files|*.txt|All Files|*.*|", parentdialog = item_saveas.getDialog)
 
-    filedlg.popup(Position.CENTER, Position.CENTER)
+    filedlg.popup(Position.CENTERPARENT, Position.CENTERPARENT)
 
     if (filedlg.int.status != -1)
       write_file(filedlg.value, multitext.value)
 
     filedlg.destroy()
     Return.DEFAULT
+  }
+
+  val goto_ok_action_cb = (bt_ok: Handle) => {
+    val line_count = bt_ok.int.text_linecount
+    val txt        = bt_ok.getDialogChild("LINE_TEXT")
+    val line       = txt.int.value
+
+    if (line < 1 || line >= line_count) {
+      iup.message("Error", "Invalid line number.")
+      Return.DEFAULT
+    } else {
+      bt_ok.getDialog.status = 1
+      Return.CLOSE
+    }
   }
 
   val fond_cb = (_: Handle) => {
