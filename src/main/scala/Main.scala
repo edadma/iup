@@ -350,7 +350,11 @@ object Main extends App {
       val pos  = multitext.textConvertLinColToPos(line, 0)
 
       multitext.int.caretpos = pos
+      multitext.int.scrolltopos = pos
     }
+
+    dlg.destroy()
+    Return.DEFAULT
   }
 
   val fond_cb = (_: Handle) => {
