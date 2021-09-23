@@ -311,7 +311,7 @@ object Main extends App {
     val txt        = bt_ok.getDialogChild("LINE_TEXT")
     val line       = txt.int.value
 
-    if (line < 1 || line >= line_count) {
+    if (line < 1 || line > line_count) {
       iup.message("Error", "Invalid line number.")
       Return.DEFAULT
     } else {
@@ -344,6 +344,7 @@ object Main extends App {
                               parentdialog = item_goto.getDialog)
 
     dlg.popup(Position.CENTERPARENT, Position.CENTERPARENT)
+    multitext.setFocus
 
     if (dlg.int.status == 1) {
       val line = txt.int.value
