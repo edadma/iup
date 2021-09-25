@@ -3,12 +3,12 @@ iup
 
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/edadma/iup?include_prereleases) ![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/edadma/iup) ![GitHub last commit](https://img.shields.io/github/last-commit/edadma/iup) ![GitHub](https://img.shields.io/github/license/edadma/iup)
 
-*iup* provides Scala Native bindings for the [LibYAML](https://pyyaml.org/wiki/LibYAML) C library for parsing [YAML](https://yaml.org/).
+*iup* provides Scala Native bindings for the [IUP](https://www.tecgraf.puc-rio.br/iup/) multi-platform toolkit for building graphical user interfaces.
 
 Overview
 --------
 
-The goal of this project is to provide easy-to-use Scala Native bindings for the LibYAML YAML parser library.  Currently, all the event based YAML parsing capabilities of LibYAML are supported.  All twenty-eight examples in [Chapter 2](https://yaml.org/spec/1.2.1/#Preview) of the YAML Specification can be parsed.  There is also support for constructing a Scala data structure corresponding to the YAML being parsed.  However, support for application specific tags is lacking. The LibYAML bindings are not complete, but work is ongoing.
+The goal of this project is to provide easy-to-use Scala Native bindings for the IUP user interface library.
 
 The more "programmer friendly" part of this library is found in the `io.github.edadma.iup` package. That's the only
 package you need to import from, as seen in the example below. The other package in the library
