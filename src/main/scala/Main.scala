@@ -358,6 +358,10 @@ object Main extends App {
     Return.DEFAULT
   }
 
+  val find_next_action_cb = (bt_next: Handle) => {
+    val multitext = bt_next.handle.multitext
+  }
+
   val fond_cb = (_: Handle) => {
     val fontdlg = iup.fontDlg
     val font    = multitext.font

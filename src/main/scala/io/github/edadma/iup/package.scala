@@ -107,6 +107,10 @@ package object iup {
     func(arg).value
   }
 
+  class AttributeHandle(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
+    def selectDynamic(name: String): Handle = lib.IupGetAttribute(ptr, atom(name.toUpperCase)).asInstanceOf[Handle]
+  }
+
   class AttributeInt(val ptr: lib.IhandlePtr) extends AnyVal with Dynamic {
     def updateDynamic(name: String)(value: Int): Unit = ptr.setInt(name.toUpperCase, value)
     def selectDynamic(name: String): Int              = ptr.getInt(name.toUpperCase)
@@ -125,6 +129,8 @@ package object iup {
     def int = new AttributeInt(ptr)
 
     def str = new AttributeStr(ptr)
+
+    def handle = new AttributeHandle(ptr)
 
     def selectDynamic(name: String): String = ptr.getAttribute(name.toUpperCase)
 
