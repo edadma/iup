@@ -73,6 +73,8 @@ object Main extends App {
 
 Screenshot:
 
+![2.1](https://github.com/edadma/iup/raw/dev/readme/2-1.png)
+
 Documentation
 -------------
 
