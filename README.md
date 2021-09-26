@@ -50,7 +50,7 @@ import io.github.edadma.iup._
 Examples
 --------
 
-The following examples are translated directly from chapter 2 of [Tutorial](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html) without any changes.
+The following examples are translated directly from chapter 2 of [Tutorial](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html) without any changes, except for increasing the margin in the last example.
 
 ### Example [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
 
@@ -183,6 +183,47 @@ object Main extends App {
 Screenshot:
 
 ![2.4](https://github.com/edadma/iup/raw/dev/readme/2-4.png)
+
+### Example [2.5 Improving the Layout](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Improving_the_Layout)
+
+```scala
+import io.github.edadma.iup
+import io.github.edadma.iup.Implicits._
+import io.github.edadma.iup.{Handle, Position, Return, Result}
+
+object Main extends App {
+
+  val btn_exit_cb = (_: Handle) =>
+    /* Exits the main loop */
+    Return.CLOSE
+
+  if (iup.open == Result.ERROR) {
+    println("Error opening window")
+    sys.exit(1)
+  }
+
+  val label  = iup.label("Hello world from IUP.")
+  val button = iup.button("OK", null);
+  val vbox   = iup.vbox(label, button)(alignment = "acenter", gap = 10, margin = 30 x 10)
+  val dlg    = iup.dialog(vbox)
+
+  dlg.TITLE = "Hello World 5"
+
+  /* Registers callbacks */
+  button.ACTION = btn_exit_cb
+
+  dlg.showXY(Position.CENTER, Position.CENTER)
+
+  iup.mainLoop
+  iup.close()
+
+}
+```
+
+Screenshot:
+
+![2.5](https://github.com/edadma/iup/raw/dev/readme/2-4.png)
+
 
 Documentation
 -------------
