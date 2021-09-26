@@ -222,7 +222,7 @@ object Main extends App {
 
 Screenshot:
 
-![2.5](https://github.com/edadma/iup/raw/dev/readme/2-4.png)
+![2.5](https://github.com/edadma/iup/raw/dev/readme/2-5.png)
 
 
 Documentation
