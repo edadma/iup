@@ -108,37 +108,37 @@
 
 //### Example [2.5 Improving the Layout](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Improving_the_Layout)
 
-import io.github.edadma.iup
-import io.github.edadma.iup.Implicits._
-import io.github.edadma.iup.{Handle, Position, Return, Result}
-
-object Main extends App {
-
-  val btn_exit_cb = (_: Handle) =>
-    /* Exits the main loop */
-    Return.CLOSE
-
-  if (iup.open == Result.ERROR) {
-    println("Error opening window")
-    sys.exit(1)
-  }
-
-  val label  = iup.label("Hello world from IUP.")
-  val button = iup.button("OK", null);
-  val vbox   = iup.vbox(label, button)(alignment = "acenter", gap = 10, margin = 30 x 10)
-  val dlg    = iup.dialog(vbox)
-
-  dlg.TITLE = "Hello World 5"
-
-  /* Registers callbacks */
-  button.ACTION = btn_exit_cb
-
-  dlg.showXY(Position.CENTER, Position.CENTER)
-
-  iup.mainLoop
-  iup.close()
-
-}
+//import io.github.edadma.iup
+//import io.github.edadma.iup.Implicits._
+//import io.github.edadma.iup.{Handle, Position, Return, Result}
+//
+//object Main extends App {
+//
+//  val btn_exit_cb = (_: Handle) =>
+//    /* Exits the main loop */
+//    Return.CLOSE
+//
+//  if (iup.open == Result.ERROR) {
+//    println("Error opening window")
+//    sys.exit(1)
+//  }
+//
+//  val label  = iup.label("Hello world from IUP.")
+//  val button = iup.button("OK", null);
+//  val vbox   = iup.vbox(label, button)(alignment = "acenter", gap = 10, margin = 30 x 10)
+//  val dlg    = iup.dialog(vbox)
+//
+//  dlg.TITLE = "Hello World 5"
+//
+//  /* Registers callbacks */
+//  button.ACTION = btn_exit_cb
+//
+//  dlg.showXY(Position.CENTER, Position.CENTER)
+//
+//  iup.mainLoop
+//  iup.close()
+//
+//}
 
 ////### [3.1 Main Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial3.html#Main_Dialog)
 //
