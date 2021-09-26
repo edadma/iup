@@ -50,7 +50,7 @@ import io.github.edadma.iup._
 Examples
 --------
 
-The following examples are translated directly from chapter 2 of [Tutorial](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html) without any changes, except for increasing the margin in the last example.
+The following examples are translated directly from chapter 2 of the [Tutorial](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html) without any changes, except for increasing the margin in the last example.
 
 ### Example [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
 
@@ -229,10 +229,10 @@ Documentation
 -------------
 
 API documentation is forthcoming, however documentation for the *IUP* C library is
-found [here](https://www.tecgraf.puc-rio.br/iup/).  Build instructions of the C libraries are [here](https://www.tecgraf.puc-rio.br/iup/en/guide.html#buildlib).
+found [here](https://www.tecgraf.puc-rio.br/iup/).  Build instructions for the C libraries are [here](https://www.tecgraf.puc-rio.br/iup/en/guide.html#buildlib).
 
 
 License
 -------
 
-This project is licensed under the [ISC](https://github.com/edadma/iup/blob/main/LICENSE).  The IUP C libraries (included in the `native-lib` folder) are under the [Tecgraf Library License](https://www.tecgraf.puc-rio.br/iup/en/copyright.html).
+This project is licensed under the [ISC](https://github.com/edadma/iup/blob/main/LICENSE).  The IUP C libraries (included in the `native-lib` folder) are under the [Tecgraf Library License](https://www.tecgraf.puc-rio.br/iup/en/copyright.html), which is a permissive MIT type license.
