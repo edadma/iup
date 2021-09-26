@@ -1,7 +1,24 @@
 //### [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
 
+//import io.github.edadma.iup
+//import io.github.edadma.iup.Result
+//
+//object Main extends App {
+//
+//  if (iup.open == Result.ERROR) {
+//    println("Error opening window")
+//    sys.exit(1)
+//  }
+//
+//  iup.message("Hello World 1", "Hello world from IUP.")
+//  iup.close()
+//
+//}
+
+//### [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
+
 import io.github.edadma.iup
-import io.github.edadma.iup.Result
+import io.github.edadma.iup.{Position, Result}
 
 object Main extends App {
 
@@ -10,35 +27,22 @@ object Main extends App {
     sys.exit(1)
   }
 
-  iup.message("Hello World 1", "Hello world from IUP.")
+  val label = iup.label("Hello world from IUP.")
+  val dlg   = iup.dialog(iup.vbox(label))
+
+  dlg.TITLE = "Hello World 2"
+  dlg.showXY(Position.CENTER, Position.CENTER)
+
+  iup.mainLoop
   iup.close()
 
 }
 
-//### [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
+//### [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
 
 //import io.github.edadma.iup
 //import io.github.edadma.iup.Implicits._
 //import io.github.edadma.iup.{Handle, Position, Return, Result}
-//
-//object Main extends App {
-//
-//  if (IupOpen == IUP_ERROR) {
-//    println("Error opening window")
-//    sys.exit(1)
-//  }
-//
-//  val label = IupLabel("Hello world from IUP.")
-//  val dlg   = IupDialog(IupVbox(label))
-//
-//  dlg.TITLE = "Hello World 2"
-//  dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
-//
-//  IupMainLoop
-//
-//  IupClose()
-//
-//}
 
 //object Main extends App {
 //

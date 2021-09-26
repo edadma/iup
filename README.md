@@ -52,7 +52,7 @@ Examples
 
 The following examples are translated directly from chapter 2 of [Tutorial](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html) without any changes.
 
-### [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
+### Example [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
 
 ```scala
 import io.github.edadma.iup
@@ -74,6 +74,35 @@ object Main extends App {
 Screenshot:
 
 ![2.1](https://github.com/edadma/iup/raw/dev/readme/2-1.png)
+
+### Example [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
+
+```scala
+import io.github.edadma.iup
+import io.github.edadma.iup.{Position, Result}
+
+object Main extends App {
+
+  if (iup.open == Result.ERROR) {
+    println("Error opening window")
+    sys.exit(1)
+  }
+
+  val label = iup.label("Hello world from IUP.")
+  val dlg   = iup.dialog(iup.vbox(label))
+
+  dlg.TITLE = "Hello World 2"
+  dlg.showXY(Position.CENTER, Position.CENTER)
+
+  iup.mainLoop
+  iup.close()
+
+}
+```
+
+Screenshot:
+
+![2.2](https://github.com/edadma/iup/raw/dev/readme/2-2.png)
 
 Documentation
 -------------
