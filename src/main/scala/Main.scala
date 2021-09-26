@@ -40,72 +40,69 @@
 
 //### Example [2.3 Adding Interaction](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Interaction)
 
-import io.github.edadma.iup
-import io.github.edadma.iup.{Handle, Position, Return, Result}
-
-object Main extends App {
-
-  val btn_exit_cb = (_: Handle) => {
-    iup.message("Hello World Message", "Hello world from IUP.")
-
-    /* Exits the main loop */
-    Return.CLOSE
-  }
-
-  if (iup.open == Result.ERROR) {
-    println("Error opening window")
-    sys.exit(1)
-  }
-
-  val button = iup.button("OK", null);
-  val vbox   = iup.vbox(button);
-  val dlg    = iup.dialog(vbox)
-
-  dlg.TITLE = "Hello World 3"
-
-  /* Registers callbacks */
-  button.ACTION = btn_exit_cb
-
-  dlg.showXY(Position.CENTER, Position.CENTER)
-
-  iup.mainLoop
-  iup.close()
-
-}
-
-//### Example [2.3 Adding Interaction](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Interaction)
-
 //import io.github.edadma.iup
-//import io.github.edadma.iup.Implicits._
 //import io.github.edadma.iup.{Handle, Position, Return, Result}
-
+//
 //object Main extends App {
 //
-//  val btn_exit_cb =
-//    (h: Ihandle) =>
-//      /* Exits the main loop */
-//    IUP_CLOSE
+//  val btn_exit_cb = (_: Handle) => {
+//    iup.message("Hello World Message", "Hello world from IUP.")
 //
-//  if (IupOpen == IUP_ERROR) {
+//    /* Exits the main loop */
+//    Return.CLOSE
+//  }
+//
+//  if (iup.open == Result.ERROR) {
 //    println("Error opening window")
 //    sys.exit(1)
 //  }
 //
-//  val label  = IupLabel("Hello world from IUP.")
-//  val button = IupButton("OK", null)
-//  val vbox   = IupVbox(label, button)
-//  val dlg    = IupDialog(vbox)
+//  val button = iup.button("OK", null);
+//  val vbox   = iup.vbox(button);
+//  val dlg    = iup.dialog(vbox)
+//
+//  dlg.TITLE = "Hello World 3"
+//
+//  /* Registers callbacks */
+//  button.ACTION = btn_exit_cb
+//
+//  dlg.showXY(Position.CENTER, Position.CENTER)
+//
+//  iup.mainLoop
+//  iup.close()
+//
+//}
+
+//### Example [2.4 Adding Layout Elements](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Adding_Layout_Elements)
+
+//import io.github.edadma.iup
+//import io.github.edadma.iup.{Handle, Position, Return, Result}
+//
+//object Main extends App {
+//
+//  val btn_exit_cb = (_: Handle) =>
+//    /* Exits the main loop */
+//    Return.CLOSE
+//
+//  if (iup.open == Result.ERROR) {
+//    println("Error opening window")
+//    sys.exit(1)
+//  }
+//
+//  val label  = iup.label("Hello world from IUP.")
+//  val button = iup.button("OK", null);
+//  val vbox   = iup.vbox(label, button)
+//  val dlg    = iup.dialog(vbox)
 //
 //  dlg.TITLE = "Hello World 4"
 //
 //  /* Registers callbacks */
 //  button.ACTION = btn_exit_cb
 //
-//  dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
+//  dlg.showXY(Position.CENTER, Position.CENTER)
 //
-//  IupMainLoop
-//
-//  IupClose()
+//  iup.mainLoop
+//  iup.close()
 //
 //}
 
