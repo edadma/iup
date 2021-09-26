@@ -17,20 +17,55 @@
 
 //### [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
 
+//import io.github.edadma.iup
+//import io.github.edadma.iup.{Position, Result}
+//
+//object Main extends App {
+//
+//  if (iup.open == Result.ERROR) {
+//    println("Error opening window")
+//    sys.exit(1)
+//  }
+//
+//  val label = iup.label("Hello world from IUP.")
+//  val dlg   = iup.dialog(iup.vbox(label))
+//
+//  dlg.TITLE = "Hello World 2"
+//  dlg.showXY(Position.CENTER, Position.CENTER)
+//
+//  iup.mainLoop
+//  iup.close()
+//
+//}
+
+//### Example [2.3 Adding Interaction](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Interaction)
+
 import io.github.edadma.iup
-import io.github.edadma.iup.{Position, Result}
+import io.github.edadma.iup.{Handle, Position, Return, Result}
 
 object Main extends App {
+
+  val btn_exit_cb = (_: Handle) => {
+    iup.message("Hello World Message", "Hello world from IUP.")
+
+    /* Exits the main loop */
+    Return.CLOSE
+  }
 
   if (iup.open == Result.ERROR) {
     println("Error opening window")
     sys.exit(1)
   }
 
-  val label = iup.label("Hello world from IUP.")
-  val dlg   = iup.dialog(iup.vbox(label))
+  val button = iup.button("OK", null);
+  val vbox   = iup.vbox(button);
+  val dlg    = iup.dialog(vbox)
 
-  dlg.TITLE = "Hello World 2"
+  dlg.TITLE = "Hello World 3"
+
+  /* Registers callbacks */
+  button.ACTION = btn_exit_cb
+
   dlg.showXY(Position.CENTER, Position.CENTER)
 
   iup.mainLoop
@@ -38,42 +73,11 @@ object Main extends App {
 
 }
 
-//### [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
+//### Example [2.3 Adding Interaction](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Interaction)
 
 //import io.github.edadma.iup
 //import io.github.edadma.iup.Implicits._
 //import io.github.edadma.iup.{Handle, Position, Return, Result}
-
-//object Main extends App {
-//
-//  val btn_exit_cb = (h: Ihandle) => {
-//    IupMessage("Hello World Message", "Hello world from IUP.")
-//
-//    /* Exits the main loop */
-//    IUP_CLOSE
-//  }
-//
-//  if (IupOpen == IUP_ERROR) {
-//    println("Error opening window")
-//    sys.exit(1)
-//  }
-//
-//  val button = IupButton("OK", null);
-//  val vbox   = IupVbox(button);
-//  val dlg    = IupDialog(vbox)
-//
-//  dlg.TITLE = "Hello World 3"
-//
-//  /* Registers callbacks */
-//  button.ACTION = btn_exit_cb
-//
-//  dlg.IupShowXY(IUP_CENTER, IUP_CENTER)
-//
-//  IupMainLoop
-//
-//  IupClose()
-//
-//}
 
 //object Main extends App {
 //

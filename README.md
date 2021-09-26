@@ -104,6 +104,48 @@ Screenshot:
 
 ![2.2](https://github.com/edadma/iup/raw/dev/readme/2-2.png)
 
+### Example [2.3 Adding Interaction](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Interaction)
+
+```scala
+import io.github.edadma.iup
+import io.github.edadma.iup.{Handle, Position, Return, Result}
+
+object Main extends App {
+
+  val btn_exit_cb = (_: Handle) => {
+    iup.message("Hello World Message", "Hello world from IUP.")
+
+    /* Exits the main loop */
+    Return.CLOSE
+  }
+
+  if (iup.open == Result.ERROR) {
+    println("Error opening window")
+    sys.exit(1)
+  }
+
+  val button = iup.button("OK", null);
+  val vbox   = iup.vbox(button);
+  val dlg    = iup.dialog(vbox)
+
+  dlg.TITLE = "Hello World 3"
+
+  /* Registers callbacks */
+  button.ACTION = btn_exit_cb
+
+  dlg.showXY(Position.CENTER, Position.CENTER)
+
+  iup.mainLoop
+  iup.close()
+
+}
+```
+
+Screenshots:
+
+![2.3 1](https://github.com/edadma/iup/raw/dev/readme/2-3-1.png) ![2.3 2](https://github.com/edadma/iup/raw/dev/readme/2-3-2.png)
+
+
 Documentation
 -------------
 
