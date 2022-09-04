@@ -12,7 +12,7 @@ The goal of this project is to provide easy-to-use Scala Native bindings for the
 
 The more "programmer friendly" part of this library is found in the `io.github.edadma.iup` package. That's the only
 package you need to import from, as seen in the example below. The other package in the library
-is `io.github.edadma.iup.extern` which provides for interaction with the *LibYAML* C library using Scala Native
+is `io.github.edadma.iup.extern` which provides for interaction with the *Libiup* C library using Scala Native
 interoperability elements from the so-call `unsafe` namespace. There are no public declarations in
 the `io.github.edadma.iup` package that use `unsafe` types in their parameter or return types, making it a pure
 Scala bindings library. Consequently, you never have to worry about memory allocation or type conversions.
