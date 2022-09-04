@@ -29,7 +29,7 @@ nativeLinkingOptions := Seq(s"-L${baseDirectory.value}/native-lib")
 Include the following in your `project/plugins.sbt`:
 
 ```sbt
-addSbtPlugin("com.codecommit" % "sbt-github-packages" % "0.5.2")
+addSbtPlugin("com.codecommit" % "sbt-github-packages" % "0.5.3")
 ```
 
 Include the following in your `build.sbt`:
@@ -37,7 +37,7 @@ Include the following in your `build.sbt`:
 ```sbt
 resolvers += Resolver.githubPackages("edadma")
 
-libraryDependencies += "io.github.edadma" %%% "iup" % "0.1.0"
+libraryDependencies += "io.github.edadma" %%% "iup" % "0.1.1"
 ```
 
 Use the following `import` statement in your code:

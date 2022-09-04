@@ -251,15 +251,15 @@ package object iup {
     /************************************************************************/
     //  def saveImageAsText(ih: Handle, filename: /*const*/ String, format: /*const*/ String, name: /*const*/ String): Int = lib.IupSaveImageAsText(ih, filename, format, name)
     def textConvertLinColToPos(lin: Int, col: Int): Int = {
-      val pos = stackalloc[CInt]
+      val pos = stackalloc[CInt]()
 
       lib.IupTextConvertLinColToPos(ptr, lin, col, pos)
       !pos
     }
 
     def textConvertPosToLinCol(pos: Int): (Int, Int) = {
-      val lin = stackalloc[CInt]
-      val col = stackalloc[CInt]
+      val lin = stackalloc[CInt]()
+      val col = stackalloc[CInt]()
 
       lib.IupTextConvertPosToLinCol(ptr, pos, lin, col)
       (!lin, !col)

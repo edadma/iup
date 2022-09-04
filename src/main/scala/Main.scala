@@ -1,19 +1,19 @@
 //### [2.1 Initialization](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Initialization)
 
-//import io.github.edadma.iup
-//import io.github.edadma.iup.Result
-//
-//object Main extends App {
-//
-//  if (iup.open == Result.ERROR) {
-//    println("Error opening window")
-//    sys.exit(1)
-//  }
-//
-//  iup.message("Hello World 1", "Hello world from IUP.")
-//  iup.close()
-//
-//}
+import io.github.edadma.iup
+import io.github.edadma.iup.Result
+
+object Main extends App {
+
+  if (iup.open == Result.ERROR) {
+    println("Error opening window")
+    sys.exit(1)
+  }
+
+  iup.message("Hello World 1", "Hello world from IUP.")
+  iup.close()
+
+}
 
 //### [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
 

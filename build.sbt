@@ -1,8 +1,8 @@
 name := "iup"
 
-version := "0.1.0"
+version := "0.1.1"
 
-scalaVersion := "2.13.6"
+scalaVersion := "3.1.3"
 
 enablePlugins(ScalaNativePlugin)
 
