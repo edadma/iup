@@ -23,8 +23,9 @@ Usage
 Two of the libraries (`iup` and `img`) have been built and placed in the `native-lib` folder.  To use them, include the following in your `build.sbt`:
 
 ```sbt
-nativeLinkingOptions := Seq(s"-L${baseDirectory.value}/native-lib")
+nativeConfig ~= { c => c.withLinkingOptions(c.linkingOptions :+ "-L${baseDirectory.value}/native-lib") }
 ```
+
 
 Include the following in your `project/plugins.sbt`:
 

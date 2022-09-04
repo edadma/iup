@@ -10,7 +10,11 @@ nativeLinkStubs := true
 
 nativeMode := "debug"
 
-nativeLinkingOptions := Seq(s"-L${baseDirectory.value}/native-lib")
+//nativeLinkingOptions += "-static"
+
+//nativeLinkingOptions += s"-L${baseDirectory.value}/native-lib"
+
+nativeConfig ~= { c => c.withLinkingOptions(c.linkingOptions :+ "-L${baseDirectory.value}/native-lib") }
 
 scalacOptions ++= Seq("-deprecation",
                       "-feature",
