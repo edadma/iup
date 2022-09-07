@@ -16,13 +16,15 @@ nativeMode := "debug"
 
 nativeConfig ~= { c => c.withLinkingOptions(c.linkingOptions :+ "-L${baseDirectory.value}/native-lib") }
 
-scalacOptions ++= Seq("-deprecation",
-                      "-feature",
-                      "-unchecked",
-                      "-language:postfixOps",
-                      "-language:implicitConversions",
-                      "-language:existentials",
-                      "-language:dynamics")
+scalacOptions ++= Seq(
+  "-deprecation",
+  "-feature",
+  "-unchecked",
+  "-language:postfixOps",
+  "-language:implicitConversions",
+  "-language:existentials",
+  "-language:dynamics",
+)
 
 organization := "io.github.edadma"
 

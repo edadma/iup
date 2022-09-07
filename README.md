@@ -74,7 +74,7 @@ object Main extends App {
 
 Screenshot:
 
-![2.1](https://github.com/edadma/iup/raw/dev/readme/2-1.png)
+![2.1](https://github.com/edadma/iup/blob/stable/readme/2-1.png)
 
 ### Example [2.2 Creating a Dialog](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Dialog)
 
@@ -103,7 +103,7 @@ object Main extends App {
 
 Screenshot:
 
-![2.2](https://github.com/edadma/iup/raw/dev/readme/2-2.png)
+![2.2](https://github.com/edadma/iup/blob/stable/readme/2-2.png)
 
 ### Example [2.3 Adding Interaction](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Interaction)
 
@@ -144,7 +144,7 @@ object Main extends App {
 
 Screenshots:
 
-![2.3 1](https://github.com/edadma/iup/raw/dev/readme/2-3-1.png) ![2.3 2](https://github.com/edadma/iup/raw/dev/readme/2-3-2.png)
+![2.3 1](https://github.com/edadma/iup/blob/stable/readme/2-3-1.png) ![2.3 2](https://github.com/edadma/iup/blob/stable/readme/2-3-2.png)
 
 ### Example [2.4 Adding Layout Elements](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Adding_Layout_Elements)
 
@@ -183,7 +183,7 @@ object Main extends App {
 
 Screenshot:
 
-![2.4](https://github.com/edadma/iup/raw/dev/readme/2-4.png)
+![2.4](https://github.com/edadma/iup/blob/stable/readme/2-4.png)
 
 ### Example [2.5 Improving the Layout](https://www.tecgraf.puc-rio.br/iup/en/tutorial/tutorial2.html#Improving_the_Layout)
 
@@ -223,7 +223,7 @@ object Main extends App {
 
 Screenshot:
 
-![2.5](https://github.com/edadma/iup/raw/dev/readme/2-5.png)
+![2.5](https://github.com/edadma/iup/blob/stable/readme/2-5.png)
 
 
 Documentation
