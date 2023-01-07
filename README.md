@@ -38,7 +38,7 @@ Include the following in your `build.sbt`:
 ```sbt
 resolvers += Resolver.githubPackages("edadma")
 
-libraryDependencies += "io.github.edadma" %%% "iup" % "0.1.1"
+libraryDependencies += "io.github.edadma" %%% "iup" % "0.1.2"
 ```
 
 Use the following `import` statement in your code:
